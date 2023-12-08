@@ -1,0 +1,20 @@
+.skeleton-div {
+    display: flex;
+    place-items: center;
+    width: 200px;
+    height: 200px;
+    background-color: cadetblue;
+    position: absolute;
+    top: 100px;
+}
+
+.skeleton-div button {
+    text-align: center;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+
+.skeleton-div h2 {
+    position: relative;
+}
