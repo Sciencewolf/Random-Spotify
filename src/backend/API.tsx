@@ -1,23 +1,25 @@
 import UpdateSkeleton from "./UpdateSkeleton.tsx";
 import {useEffect, useState} from "react";
-
+import '../style/Skeleton.css'
 function API(): JSX.Element {
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
-    const [songLen, setSongLen] = useState(0.0)
+    const [songArtist, setSongArtist] = useState("")
 
-
-    // playlist fetch
+    // fetch
 
     useEffect(() => {
-        setSongImg("t")
-        setSongName("3")
-        setSongLen(0.5)
+        setSongImg("https://www.highsnobiety.com/static-assets/dato/1696613224-drake-for-all-the-dogs-lyrics-0.jpg");
+        setSongName("name");
+        setSongArtist("artist");
+
     }, []);
 
     return (
         <>
-            <UpdateSkeleton songImg={songImg} songName={songName} songLen={songLen} />
+            {/*// login */}
+
+            <UpdateSkeleton songImg={songImg} songName={songName} songArtist={songArtist} />
         </>
     )
 }

@@ -1,15 +1,15 @@
 
-function UpdateSkeleton(props: {songImg: string, songName: string, songLen: number}) {
+function UpdateSkeleton(props: {songImg: string, songName: string, songArtist: string}) {
     const songImg: HTMLElement | null = document.getElementById("song-img");
     const songName: HTMLElement | null = document.getElementById("songName-h2");
-    const songLen:HTMLElement | null = document.getElementById("songLen-h4");
+    const songArtist:HTMLElement | null = document.getElementById("songArtist-h4");
 
     // @ts-ignore
     songImg.src = props.songImg;
     // @ts-ignore
     songName.innerHTML = props.songName;
     // @ts-ignore
-    songLen.innerHTML = props.songLen.toString();
+    songArtist.innerHTML = props.songArtist;
 
     return (
         <></>
