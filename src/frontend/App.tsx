@@ -1,13 +1,14 @@
 import '../style/App.css'
 import Button from "./Button.tsx";
 import Skeleton from "./Skeleton.tsx";
+import Login from "../backend/Login.tsx";
 
 function App() {
 
-  //   OAuth by Spotify
   return (
     <>
-        <Skeleton imgSRC={""} songName={""} songLen={0.0}/>
+        <Login />
+        <Skeleton imgSRC={""} songName={""} songArtist={""}/>
         <Button />
     </>
   )

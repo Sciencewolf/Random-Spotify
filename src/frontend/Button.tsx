@@ -16,7 +16,7 @@ function Button() {
                     onClick={() => {handleClick()}}
             >
                 {api ? <API /> : ""} {/* call component */}
-                GET {/* text */}
+                Start
             </button>
         </>
     )
