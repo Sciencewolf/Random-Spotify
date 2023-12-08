@@ -1,19 +1,25 @@
+import UpdateSkeleton from "./UpdateSkeleton.tsx";
+import {useEffect, useState} from "react";
 
-function API(props: { isPlaylist: boolean; }) {
-    if(props.isPlaylist) {
-        return (
-            <>
-                <h2>Playlist</h2>
-            </>
-        )
-    }
+function API(): JSX.Element {
+    const [songImg, setSongImg] = useState("")
+    const [songName, setSongName] = useState("")
+    const [songLen, setSongLen] = useState(0.0)
+
+
+    // playlist fetch
+
+    useEffect(() => {
+        setSongImg("t")
+        setSongName("3")
+        setSongLen(0.5)
+    }, []);
+
     return (
         <>
-            <h1>
-                Hello
-            </h1>
+            <UpdateSkeleton songImg={songImg} songName={songName} songLen={songLen} />
         </>
-        )
+    )
 }
 
 export default API;
