@@ -1,20 +1,40 @@
 .skeleton-div {
     display: flex;
-    place-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: auto;
+    background-color: lightgrey;
+    color: black;
+}
+
+#song-img {
     width: 200px;
     height: 200px;
-    background-color: cadetblue;
-    position: absolute;
-    top: 100px;
+    object-fit: contain;
 }
 
-.skeleton-div button {
+#play-button {
     text-align: center;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    border-color: transparent;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s ease-out;
+    transform: scale(1);
 }
 
-.skeleton-div h2 {
+#play-button:hover {
+    transition: all .3s ease-in-out;
+    transform: scale(1.05);
+}
+
+#songName-h2 {
     position: relative;
 }

@@ -1,11 +1,22 @@
 #root {
   max-width: 1280px;
+  height: max-content;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  gap: 4em;
+  flex-direction: column;
+}
+
+body {
+  background-color: mintcream;
+}
+
+#root button:hover {
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: no-preference) {
