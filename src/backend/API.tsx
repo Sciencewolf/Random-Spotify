@@ -6,6 +6,8 @@ function API(): JSX.Element {
     const [songName, setSongName] = useState("")
     const [songArtist, setSongArtist] = useState("")
 
+    const getTokenAfterLogin: string = window.location.href.split("#")[1].split("&")[0].split('=')[1];
+    console.log(getTokenAfterLogin)
     // fetch
 
     useEffect(() => {
