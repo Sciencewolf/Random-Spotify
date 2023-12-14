@@ -1,6 +1,15 @@
 import '../style/Skeleton.css'
+import {useState} from "react";
+import API from "../backend/API.tsx";
 
 function Skeleton(props: {imgSRC: string, songName: string, songArtist: string}) {
+    const [isClicked, setIsClicked] = useState(false)
+
+    function handleClick() {
+        setIsClicked(true)
+
+    }
+
     return (
         <>
             <div className={"skeleton-div"}
@@ -16,11 +25,17 @@ function Skeleton(props: {imgSRC: string, songName: string, songArtist: string})
                     id={"songArtist-h4"}
                 />
                 <button className={"play-button"}
-                        id={"play-button"}>
+                        id={"play-button"}
+                        onClick={() => handleClick()}
+                >
                     <img src={"https://img.icons8.com/windows/32/play--v1.png"}
-                         alt={"play-btn"}/>
+                         alt={"play-btn"}
+                         id={"play-button-img"}
+                    />
                 </button>
             </div>
+
+            {isClicked ? <API/> : ""}
         </>
     )
 }
