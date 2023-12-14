@@ -1,6 +1,6 @@
 import '../style/Skeleton.css'
 import {useState} from "react";
-import API from "../backend/API.tsx";
+import Main from "../backend/Main.tsx";
 
 function Skeleton(props: {imgSRC: string, songName: string, songArtist: string}) {
     const [isClicked, setIsClicked] = useState(false)
@@ -35,7 +35,7 @@ function Skeleton(props: {imgSRC: string, songName: string, songArtist: string})
                 </button>
             </div>
 
-            {isClicked ? <API/> : ""}
+            {isClicked ? <Main/> : ""}
         </>
     )
 }
