@@ -55,3 +55,15 @@
 .login:has(h3):hover {
     color: white;
 }
+
+#logout {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: limegreen;
+}

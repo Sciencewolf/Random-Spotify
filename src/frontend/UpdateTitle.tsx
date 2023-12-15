@@ -1,11 +1,12 @@
-function updateTitle(artist: string, trackName: string) {
+function updateTitle(props: {_title: string}) {
     const title = document.getElementById('title')
     // @ts-ignore
-    title.innerHTML = `${artist} - ${trackName}`
+    title.innerHTML = props._title
 
     return (
-        <></>
+        <>
+        </>
     )
 }
 
-export default updateTitle
+export default updateTitle;

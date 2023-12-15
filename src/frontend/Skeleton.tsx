@@ -7,7 +7,6 @@ function Skeleton(props: {imgSRC: string, songName: string, songArtist: string})
 
     function handleClick() {
         setIsClicked(true)
-
     }
 
     return (
@@ -21,8 +20,8 @@ function Skeleton(props: {imgSRC: string, songName: string, songArtist: string})
                 <h2 className={"songName-h2"}
                     id={"songName-h2"}
                 />
-                <h4 className={"songArtist-h4"}
-                    id={"songArtist-h4"}
+                <h5 className={"songArtist-h5"}
+                    id={"songArtist-h5"}
                 />
                 <button className={"play-button"}
                         id={"play-button"}
