@@ -13,7 +13,6 @@ function Main(): JSX.Element {
     const [songArtist, setSongArtist] = useState("")
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImg, setPlaylistImg] = useState("")
-    const [backgroundColor, setBackgroundColor] = useState('')
     const [title, setTitle] = useState("")
 
     const userInfo = async() => {
@@ -58,7 +57,6 @@ function Main(): JSX.Element {
             setSongImg(firstTrack['track']['album']['images'][1]['url']);
             setPlaylistName(getJson['name'])
             setPlaylistImg(getJson['images'][0]['url'])
-            setBackgroundColor(getJson['primary_color'])
 
         } catch (err) {
             console.log(err);
@@ -85,8 +83,7 @@ function Main(): JSX.Element {
                             songArtist={songArtist} />
             <UpdateTitle _title={title} />
             <ShowPlaylistOfSong playlistImg={playlistImg}
-                                playlistName={playlistName}
-                                backgroundColor={backgroundColor}/>
+                                playlistName={playlistName}/>
         </>
     )
 }

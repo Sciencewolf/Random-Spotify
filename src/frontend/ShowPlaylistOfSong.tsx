@@ -1,10 +1,6 @@
 import '../style/playlistOfSong.css'
 
-function showPlaylistOfSong(props: {playlistImg: string, playlistName: string, backgroundColor: string}) {
-    const div = document.getElementById('showPlaylistOfSong-div')
-    if(props.backgroundColor != null) { // @ts-ignore
-        div.style.backgroundColor = props.backgroundColor
-    }
+function showPlaylistOfSong(props: {playlistImg: string, playlistName: string}) {
     return (
         <>
             <div className={"showPlaylistOfSong-div"} id={"showPlaylistOfSong-div"}>
