@@ -3,7 +3,7 @@ import '../style/Skeleton.css'
 import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
-// import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
+import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -11,9 +11,9 @@ function Main(): JSX.Element {
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
     const [songArtist, setSongArtist] = useState("")
-    // const [playlistName, setPlaylistName] = useState("")
-    // const [playlistImg, setPlaylistImg] = useState("")
-    // const [backgroundColor, setBackgroundColor] = useState('')
+    const [playlistName, setPlaylistName] = useState("")
+    const [playlistImg, setPlaylistImg] = useState("")
+    const [backgroundColor, setBackgroundColor] = useState('')
     const [title, setTitle] = useState("")
 
     const userInfo = async() => {
@@ -56,9 +56,9 @@ function Main(): JSX.Element {
             setSongArtist(firstTrack['track']['artists'][0]['name'])
             setTitle(firstTrack['track']['artists'][0]['name'] + ' - ' + firstTrack['track']['name'])
             setSongImg(firstTrack['track']['album']['images'][1]['url']);
-            // setPlaylistName(getJson['name'])
-            // setPlaylistImg(getJson['images'][0]['url'])
-            // setBackgroundColor(getJson['primary_color'])
+            setPlaylistName(getJson['name'])
+            setPlaylistImg(getJson['images'][0]['url'])
+            setBackgroundColor(getJson['primary_color'])
 
         } catch (err) {
             console.log(err);
@@ -84,9 +84,9 @@ function Main(): JSX.Element {
                             songName={songName}
                             songArtist={songArtist} />
             <UpdateTitle _title={title} />
-            {/*<ShowPlaylistOfSong playlistImg={playlistImg}*/}
-            {/*                    playlistName={playlistName}*/}
-            {/*                    backgroundColor={backgroundColor}/>*/}
+            <ShowPlaylistOfSong playlistImg={playlistImg}
+                                playlistName={playlistName}
+                                backgroundColor={backgroundColor}/>
         </>
     )
 }

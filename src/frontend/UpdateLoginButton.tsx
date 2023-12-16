@@ -10,7 +10,7 @@ function updateLoginButton({ userIcon, userName }: Props) {
     button.type = "button"
     button.onclick = () => {
         window.localStorage.removeItem('token')
-        window.location.href = "http://localhost:5173"
+        window.location.href = import.meta.env.VITE_PRODUCTION
     }
     button.innerHTML = 'Logout'
     button.id = "logout"
