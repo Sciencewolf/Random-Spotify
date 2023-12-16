@@ -1,52 +1,51 @@
-type Props = {
-    userIcon: string,
-    userName: string
-}
+import { useState } from 'react';
+import '../style/Login.css'
 
-function updateLoginButton({ userIcon, userName }: Props) {
-    const loginDiv = document.getElementById('login')
+function UpdateLoginButton({ userIcon, userName }: Props): JSX.Element {
+    const [isHovered, setIsHovered] = useState(false);
 
-    const button = document.createElement('button')
-    button.type = "button"
-    button.onclick = () => {
-        window.localStorage.removeItem('token')
-        window.location.href = import.meta.env.VITE_PRODUCTION
-    }
-    button.innerHTML = 'Logout'
-    button.id = "logout"
-    button.className = 'logout'
+    const handleLogout = () => {
+        window.localStorage.removeItem('token');
+        window.location.href = import.meta.env.VITE_PRODUCTION;
+    };
 
-    // @ts-ignore
-    loginDiv.innerHTML = `
-        <img src=${userIcon} alt="user-icon" id="user-icon"/>
-                <h3 className="user-name" id="user-name">
-                    ${userName}
-                </h3>
-    `
+    const handleMouseOver = () => {
+        setIsHovered(true);
+    };
 
-    // @ts-ignore
-    const loginDivInnerHTML = loginDiv.innerHTML
-
-    // @ts-ignore
-    loginDiv.style.cssText = "width: 200px;gap: 1em;padding: 5px 5px"
-    // @ts-ignore
-    loginDiv.addEventListener('mouseover', () => {
-        // @ts-ignore
-        loginDiv.innerHTML = ""
-        // @ts-ignore
-        loginDiv.appendChild(button)
-    })
-
-    // @ts-ignore
-    loginDiv.addEventListener('mouseout', () => {
-        // @ts-ignore
-        loginDiv.innerHTML = loginDivInnerHTML
-    })
+    const handleMouseOut = () => {
+        setIsHovered(false);
+    };
 
     return (
-        <>
-        </>
-    )
+        <div
+            id="login"
+            className="login"
+            style={{
+                width: '200px',
+                gap: '1em',
+                padding: '5px 5px',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'none'
+            }}
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
+        >
+            {isHovered ? (
+                <button type="button" onClick={handleLogout} id="logout" className="logout">
+                    Logout
+                </button>
+            ) : (
+                <>
+                    <img src={userIcon} alt="user-icon" id="user-icon"/>
+                    <h3 className="user-name" id="user-name">
+                        {userName}
+                    </h3>
+                </>
+            )}
+        </div>
+    );
 }
 
-export default updateLoginButton;
+export default UpdateLoginButton;
