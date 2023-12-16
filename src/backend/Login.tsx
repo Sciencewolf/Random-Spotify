@@ -2,7 +2,7 @@ import '../style/Login.css'
 
 function Login() {
     const client_id = import.meta.env.VITE_CLIENT_ID;
-    const redirect_uri = "http://localhost:5173" //   http://localhost:5173 https://random-spotify.vercel.app
+    const redirect_uri = "https://random-spotify.vercel.app" //   http://localhost:5173 https://random-spotify.vercel.app
     const auth_point = "https://accounts.spotify.com/authorize"
     const response_type = "token"
 
