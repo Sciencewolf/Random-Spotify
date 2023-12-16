@@ -57,13 +57,22 @@
 }
 
 #logout {
-    width: 100px;
+    width: 200px;
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    text-decoration: none;
     color: white;
     background-color: limegreen;
+    appearance: none;
+    -webkit-appearance: none;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px;
+    border: 0;
+}
+
+#logout:hover {
+    text-decoration: none;
 }

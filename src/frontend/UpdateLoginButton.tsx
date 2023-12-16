@@ -10,7 +10,7 @@ function updateLoginButton({ userIcon, userName }: Props) {
     button.type = "button"
     button.onclick = () => {
         window.localStorage.removeItem('token')
-        window.location.href = "https://random-spotify.vercel.app/"
+        window.location.href = "http://localhost:5173"
     }
     button.innerHTML = 'Logout'
     button.id = "logout"
@@ -41,8 +41,6 @@ function updateLoginButton({ userIcon, userName }: Props) {
     loginDiv.addEventListener('mouseout', () => {
         // @ts-ignore
         loginDiv.innerHTML = loginDivInnerHTML
-        // @ts-ignore
-        loginDiv.removeChild(button)
     })
 
     return (

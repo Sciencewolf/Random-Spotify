@@ -30,6 +30,7 @@
     align-items: center;
     transition: all .3s ease-out;
     transform: scale(1);
+    background-color: white;
 }
 
 #play-button:hover {
