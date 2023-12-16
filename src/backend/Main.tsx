@@ -49,7 +49,7 @@ function Main(): JSX.Element {
             }
 
             const getJson = await response.json();
-            console.log(getJson)
+
             const firstTrack = getJson['tracks']['items'][0];
             setSongName(firstTrack['track']['name']);
             setSongArtist(firstTrack['track']['artists'][0]['name'])
@@ -64,7 +64,10 @@ function Main(): JSX.Element {
     };
 
     const fetchData = async() => {
-        const getTokenAfterLogin: string = window.location.href.split("#")[1].split("&")[0].split('=')[1];
+        const getTokenAfterLogin: string = window.location.href
+            .split("#")[1]
+            .split("&")[0]
+            .split('=')[1];
         window.localStorage.setItem("token", getTokenAfterLogin)
         userInfo().catch(err => console.log(err))
         playlist().catch(err => console.log(err))
