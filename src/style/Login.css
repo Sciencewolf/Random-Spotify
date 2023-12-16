@@ -76,3 +76,9 @@
 #logout:hover {
     text-decoration: none;
 }
+
+h3 {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
