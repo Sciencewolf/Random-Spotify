@@ -1,4 +1,4 @@
-function getCollectionOfPlaylistIDs() {
+function getPlaylistIDs() {
     return [
         "37i9dQZF1DWWY64wDtewQt",
         "37i9dQZEVXbLRQDuF5jeBp",
@@ -6,4 +6,4 @@ function getCollectionOfPlaylistIDs() {
     ]
 }
 
-export default getCollectionOfPlaylistIDs
+export default getPlaylistIDs
