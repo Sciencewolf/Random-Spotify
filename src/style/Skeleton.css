@@ -10,6 +10,48 @@
     border-radius: 10px;
 }
 
+.controllers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    position: relative;
+    top: 25px;
+}
+
+#play-button {
+    text-align: center;
+    border-radius: 50%;
+    border-color: transparent;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s ease-out;
+    transform: scale(1);
+    background-color: white;
+}
+
+#previous-button:hover, #play-button:hover, #next-button:hover {
+    transition: all .3s ease-in-out;
+    transform: scale(1.05);
+}
+
+#previous-button, #next-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: transparent;
+    text-align: center;
+    background-color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    transition: all .3s ease-out;
+    transform: scale(1);
+}
+
 #song-img {
     padding-top: 20px;
     width: 200px;
@@ -19,31 +61,10 @@
     background-color: silver;
 }
 
-#play-button {
-    text-align: center;
-    border-radius: 50%;
-    border-color: transparent;
-    width: 50px;
-    height: 50px;
-    position: relative;
-    top: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all .3s ease-out;
-    transform: scale(1);
-    background-color: white;
-}
-
-#play-button:hover {
-    transition: all .3s ease-in-out;
-    transform: scale(1.05);
-}
-
 #songName-h2 {
     position: relative;
     margin: 10px;
-    max-width: 300px;
+    max-width: 400px;
     text-overflow: ellipsis;
     overflow: hidden;
     width: 200px;
@@ -52,7 +73,7 @@
 }
 
 #songArtist-h5 {
-    margin: 10px;
+    margin: 5px;
     position: relative;
     width: 200px;
     height: 20px;

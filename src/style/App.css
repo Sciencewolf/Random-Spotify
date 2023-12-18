@@ -8,7 +8,6 @@
   justify-content: space-between;
   align-items: center;
   gap: 4em;
-  flex-direction: column;
 }
 
 body {
