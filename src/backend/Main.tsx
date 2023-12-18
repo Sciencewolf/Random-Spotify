@@ -4,6 +4,8 @@ import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
+import getPlaylistIDs from "./PlaylistIDs.ts";
+import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -13,7 +15,22 @@ function Main(): JSX.Element {
     const [songArtist, setSongArtist] = useState("")
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImg, setPlaylistImg] = useState("")
+    const [description, setDescription] = useState("")
+    const [artistImg, setArtistImg] = useState("")
     const [title, setTitle] = useState("")
+
+    const getToken = () => {
+        const getTokenAfterLogin: string = window.location.href
+            .split("#")[1]
+            .split("&")[0]
+            .split('=')[1];
+
+        if(window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
+            window.localStorage.setItem("token", getTokenAfterLogin)
+        }else {
+            window.location.hash = ''
+        }
+    }
 
     const userInfo = async() => {
         try {
@@ -36,8 +53,10 @@ function Main(): JSX.Element {
     }
 
     const playlist = async () => {
+        const [...playlistIDs] = getPlaylistIDs()
+        const randomID = Math.floor(Math.random() * playlistIDs.length)
         try {
-            const response = await fetch('https://api.spotify.com/v1/playlists/37i9dQZF1DWWY64wDtewQt', {
+            const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistIDs[randomID]}`, {
                 headers: {
                     Authorization: `Bearer ${window.localStorage.getItem("token")}`
                 }
@@ -51,42 +70,85 @@ function Main(): JSX.Element {
             const getJson = await response.json();
 
             const firstTrack = getJson['tracks']['items'][0];
+            await aboutArtist(firstTrack['track']['artists'][0]['id'])
+
             setSongName(firstTrack['track']['name']);
             setSongArtist(firstTrack['track']['artists'][0]['name'])
             setTitle(firstTrack['track']['artists'][0]['name'] + ' - ' + firstTrack['track']['name'])
             setSongImg(firstTrack['track']['album']['images'][1]['url']);
             setPlaylistName(getJson['name'])
             setPlaylistImg(getJson['images'][0]['url'])
-
         } catch (err) {
             console.log(err);
         }
     };
 
+    const aboutArtist = async(id: string) => {
+        try {
+            const response = await fetch(`https://api.spotify.com/v1/artists/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
+                }
+            })
+
+            const getJson = await response.json()
+
+            setArtistImg(getJson['images'][1]['url'])
+            setDescription(getJson['followers']['total'])
+
+        }catch (err) {
+            console.log(err)
+        }
+    }
+
+    const player = async() => {
+        try{
+            const response = ''
+            console.log(response)
+        }catch (err) {
+            console.log(err)
+        }
+    }
+
     const fetchData = async() => {
-        const getTokenAfterLogin: string = window.location.href
-            .split("#")[1]
-            .split("&")[0]
-            .split('=')[1];
-        window.localStorage.setItem("token", getTokenAfterLogin)
+        getToken()
         userInfo().catch(err => console.log(err))
         playlist().catch(err => console.log(err))
+        player().catch(err => console.log(err))
     }
 
     useEffect(() => {
         fetchData().catch(err => console.log(err))
     }, []);
 
+    const isMobileVersion = () => {
+        return /Android|iPhone/.test(window.navigator.userAgent)
+    }
+
     return (
         <>
-            <UpdateLoginButton userIcon={userIcon}
-                               userName={userName} />
-            <UpdateSkeleton songImg={songImg}
-                            songName={songName}
-                            songArtist={songArtist} />
-            <UpdateTitle _title={title} />
-            <ShowPlaylistOfSong playlistImg={playlistImg}
-                                playlistName={playlistName}/>
+            {!isMobileVersion() ? (
+                <>
+                    <UpdateLoginButton userIcon={userIcon}
+                                       userName={userName}
+                    />
+                    <AboutTheArtist artistName={songArtist}
+                                    artistImg={artistImg}
+                                    description={description + " followers."}
+                    />
+                    <UpdateSkeleton songImg={songImg}
+                                    songName={songName}
+                                    songArtist={songArtist}
+                    />
+                    <ShowPlaylistOfSong playlistImg={playlistImg}
+                                        playlistName={playlistName}
+                    />
+                    <UpdateTitle _title={title}
+                    />
+                </>
+            ) : (
+                <></>
+            )}
         </>
     )
 }

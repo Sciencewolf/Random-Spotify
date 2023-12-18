@@ -14,14 +14,34 @@ function Skeleton() {
                 <h5 className={"songArtist-h5"}
                     id={"songArtist-h5"}
                 />
-                <button className={"play-button"}
-                        id={"play-button"}
-                >
-                    <img src={"https://img.icons8.com/windows/32/play--v1.png"}
-                         alt={"play-btn"}
-                         id={"play-button-img"}
-                    />
-                </button>
+                <div className={"controllers"}
+                     id={"controllers"}>
+                    <button className={"previous-button"}
+                            id={"previous-button"}
+                    >
+                        <img src={"https://img.icons8.com/windows/32/backward-button.png"}
+                             alt={"previous-btn"}
+                             id={"previous-button-img"}
+                        />
+                    </button>
+                    <button className={"play-button"}
+                            id={"play-button"}
+                    >
+                        <img src={"https://img.icons8.com/windows/32/play--v1.png"}
+                             alt={"play-btn"}
+                             id={"play-button-img"}
+                        />
+                    </button>
+                    <button type={"button"}
+                            id={"next-button"}
+                            className={"next-button"}
+                    >
+                        <img src={"https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/24/external-next-multimedia-tanah-basah-basic-outline-tanah-basah.png"}
+                             alt={"next-btn"}
+                             id={"next-button-img"}
+                        />
+                    </button>
+                </div>
             </div>
         </>
     )
