@@ -8,6 +8,7 @@
     background-color: lightgrey;
     color: black;
     border-radius: 10px;
+    user-select: none;
 }
 
 .controllers {

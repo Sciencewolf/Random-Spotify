@@ -1,6 +1,6 @@
 import '../style/playlistOfSong.css'
 
-function showPlaylistOfSong({playlistImg, playlistName}: Props) {
+function showPlaylistOfSong({playlistImg, playlistName, followers}: Props) {
     return (
         <>
             <div className={"showPlaylistOfSong-div"}
@@ -14,6 +14,11 @@ function showPlaylistOfSong({playlistImg, playlistName}: Props) {
                 >
                     {playlistName}
                 </h2>
+                <p className={"followers-p"}
+                   id={"followers-p"}
+                >
+                    {followers} followers
+                </p>
             </div>
         </>
     )

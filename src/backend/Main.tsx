@@ -15,7 +15,8 @@ function Main(): JSX.Element {
     const [songArtist, setSongArtist] = useState("")
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImg, setPlaylistImg] = useState("")
-    const [description, setDescription] = useState("")
+    const [followersArtist, setFollowersArtist] = useState("")
+    const [followersPlaylist, setFollowersPlaylist] = useState("")
     const [artistImg, setArtistImg] = useState("")
     const [title, setTitle] = useState("")
 
@@ -68,6 +69,7 @@ function Main(): JSX.Element {
             }
 
             const getJson = await response.json();
+            console.log(getJson)
 
             const firstTrack = getJson['tracks']['items'][0];
             await aboutArtist(firstTrack['track']['artists'][0]['id'])
@@ -78,6 +80,7 @@ function Main(): JSX.Element {
             setSongImg(firstTrack['track']['album']['images'][1]['url']);
             setPlaylistName(getJson['name'])
             setPlaylistImg(getJson['images'][0]['url'])
+            setFollowersPlaylist(getJson['followers']['total'])
         } catch (err) {
             console.log(err);
         }
@@ -94,7 +97,7 @@ function Main(): JSX.Element {
             const getJson = await response.json()
 
             setArtistImg(getJson['images'][1]['url'])
-            setDescription(getJson['followers']['total'])
+            setFollowersArtist(getJson['followers']['total'])
 
         }catch (err) {
             console.log(err)
@@ -134,7 +137,7 @@ function Main(): JSX.Element {
                     />
                     <AboutTheArtist artistName={songArtist}
                                     artistImg={artistImg}
-                                    description={description + " followers."}
+                                    followers={followersArtist + " followers"}
                     />
                     <UpdateSkeleton songImg={songImg}
                                     songName={songName}
@@ -142,6 +145,7 @@ function Main(): JSX.Element {
                     />
                     <ShowPlaylistOfSong playlistImg={playlistImg}
                                         playlistName={playlistName}
+                                        followers={followersPlaylist}
                     />
                     <UpdateTitle _title={title}
                     />

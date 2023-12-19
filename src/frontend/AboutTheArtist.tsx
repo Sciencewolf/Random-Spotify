@@ -1,7 +1,7 @@
 import '../style/aboutArtist.css'
 
 
-function aboutTheArtist({artistName, artistImg, description}: Props) {
+function aboutTheArtist({artistName, artistImg, followers}: Props) {
     return (
         <>
             <div className={"aboutArtist-div"}
@@ -19,7 +19,7 @@ function aboutTheArtist({artistName, artistImg, description}: Props) {
                 <p className={"artistDescription"}
                    id={"artistDescription"}
                 >
-                    {description}
+                    {followers}
                 </p>
             </div>
         </>

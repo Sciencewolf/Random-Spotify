@@ -6,7 +6,9 @@ type Props = {
     userName?: string
     artistName?: string
     artistImg?: string
-    description?: string
+    followers?: string
     playlistImg?: string
     playlistName?: string
+    description?: string
+    errorCode?: number
 }
