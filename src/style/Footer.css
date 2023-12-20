@@ -18,6 +18,12 @@ a:visited {
     text-decoration: none;
 }
 
+@media screen and (max-width: 768px) {
+    position: static;
+    bottom: unset;
+    right: unset;
+}
+
 @media (hover: hover) {
     a:hover {
         text-decoration: underline;

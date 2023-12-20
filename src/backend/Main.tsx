@@ -40,7 +40,7 @@ function Main(): JSX.Element {
             window.localStorage.setItem("token", getTokenAfterLogin)
             window.location.hash = ''
         }else {
-            window.localStorage.setItem("token", getTokenAfterLogin)
+            // window.localStorage.setItem("token", getTokenAfterLogin) // added for iOS Safari version
             window.location.hash = ''
         }
     }
@@ -187,7 +187,7 @@ function Main(): JSX.Element {
                                         artistImg={artistImg}
                                         followers={followersArtist + " followers"}
                         />
-                        <UpdateTitle _title={title}/>
+                        <Footer />
                     </>
                 )
             )}

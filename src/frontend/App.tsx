@@ -9,8 +9,8 @@ import isMobileVersion from "../backend/isMobileVersion.ts";
 
 function App() {
     window.onbeforeunload = function() {
-        window.localStorage.removeItem("token")
-        return;
+        window.localStorage.removeItem('token')
+        return
     }
 
     if(window.location.href.includes('access_token=')) {
