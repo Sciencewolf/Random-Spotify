@@ -52,6 +52,7 @@ function Main(): JSX.Element {
 
             if(!response.ok) {
                 alert('error @ 55')
+                alert(response)
                 setCheckError(true)
                 return;
             }
@@ -150,7 +151,7 @@ function Main(): JSX.Element {
         <>
             {checkError ? (
                 <>
-                    <Error description={"Error. Refresh the page."}
+                    <Error description={"Refresh the page"}
                            errorCode={404} />
                 </>
 
