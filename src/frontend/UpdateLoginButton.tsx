@@ -34,13 +34,22 @@ function UpdateLoginButton({ userIcon, userName }: Props): JSX.Element {
             onMouseOut={handleMouseOut}
         >
             {isHovered ? (
-                <button type="button" onClick={handleLogout} id="logout" className="logout">
+                <button type="button"
+                        onClick={handleLogout}
+                        id="logout"
+                        className="logout"
+                >
                     Logout
                 </button>
             ) : (
                 <>
-                    <img src={userIcon} alt="user-icon" id="user-icon"/>
-                    <h3 className="user-name" id="user-name">
+                    <img src={userIcon}
+                         alt="user-icon"
+                         id="user-icon"
+                    />
+                    <h3 className="user-name"
+                        id="user-name"
+                    >
                         {userName}
                     </h3>
                 </>

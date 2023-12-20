@@ -41,7 +41,9 @@ function Main(): JSX.Element {
             window.localStorage.setItem("token", getTokenAfterLogin)
             window.location.hash = ''
         }else {
-            // window.localStorage.setItem("token", getTokenAfterLogin) // added for iOS Safari version
+            if(isMobileVersion()) {
+                window.localStorage.setItem("token", getTokenAfterLogin) // added for iOS Safari version
+            }
             window.location.hash = ''
         }
     }

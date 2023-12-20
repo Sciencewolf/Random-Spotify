@@ -9,12 +9,15 @@ function Skeleton() {
         <>
             {clicked ? (
                 <>
-                    <Error description={"Unauthorized"} errorCode={401} />
+                    <Error description={"Unauthorized"}
+                           errorCode={401}
+                    />
                 </>
             ) : (
                 <>
                     <div className={"skeleton-div"}
-                         id={"skeleton-div"}>
+                         id={"skeleton-div"}
+                    >
                         <div
                             id={"song-img"}
                         />
@@ -25,7 +28,8 @@ function Skeleton() {
                             id={"songArtist-h5"}
                         />
                         <div className={"controllers"}
-                             id={"controllers"}>
+                             id={"controllers"}
+                        >
                             <button className={"previous-button"}
                                     id={"previous-button"}
                             >
