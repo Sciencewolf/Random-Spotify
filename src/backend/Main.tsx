@@ -40,6 +40,7 @@ function Main(): JSX.Element {
             window.localStorage.setItem("token", getTokenAfterLogin)
             window.location.hash = ''
         }else {
+            window.localStorage.setItem("token", getTokenAfterLogin)
             window.location.hash = ''
         }
     }
