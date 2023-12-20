@@ -37,6 +37,7 @@ function Main(): JSX.Element {
 
         if(window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
             window.localStorage.setItem("token", getTokenAfterLogin)
+            window.location.hash = ''
         }else {
             window.location.hash = ''
         }
@@ -50,9 +51,11 @@ function Main(): JSX.Element {
                 }
             })
 
+            console.log(response)
+
             if(!response.ok) {
                 alert('error @ 55')
-                alert(response)
+                alert(response.status)
                 setCheckError(true)
                 return;
             }
@@ -78,6 +81,7 @@ function Main(): JSX.Element {
 
             if (!response.ok) {
                 alert('error @ 80')
+                alert(response.status)
                 setCheckError(true)
                 return;
             }
