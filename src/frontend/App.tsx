@@ -13,15 +13,6 @@ function App() {
         return;
     }
 
-    if(isMobileVersion()) {
-        return (
-            <>
-                <Login />
-                <Skeleton />
-            </>
-        )
-    }
-
     if(window.location.href.includes('access_token=')) {
         return (
             <>
@@ -39,13 +30,24 @@ function App() {
             </>
         )
     }
-    else return (
-        <>
-            <Login />
-            <Skeleton />
-            <Footer />
-        </>
-    )
+    else {
+        return (
+            <>
+                {!isMobileVersion() ? (
+                    <>
+                        <Login />
+                        <Skeleton />
+                        <Footer />
+                    </>
+                ) : (
+                    <>
+                        <Login />
+                        <Skeleton />
+                    </>
+                )}
+            </>
+        )
+    }
 }
 
 export default App
