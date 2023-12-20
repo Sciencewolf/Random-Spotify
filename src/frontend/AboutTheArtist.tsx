@@ -1,4 +1,5 @@
 import '../style/aboutArtist.css'
+import Props from "../backend/Props.ts";
 
 
 function aboutTheArtist({artistName, artistImg, followers}: Props) {
@@ -18,6 +19,9 @@ function aboutTheArtist({artistName, artistImg, followers}: Props) {
                 </h2>
                 <p className={"artistDescription"}
                    id={"artistDescription"}
+                   style={{
+                       userSelect: "none"
+                   }}
                 >
                     {followers}
                 </p>

@@ -12,3 +12,5 @@ type Props = {
     description?: string
     errorCode?: number
 }
+
+export default Props;

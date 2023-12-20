@@ -1,3 +1,5 @@
+import Props from "../backend/Props.ts";
+
 function UpdateSkeleton({ songImg, songName, songArtist }: Props): JSX.Element {
     const params: object = {
         width: 'unset',

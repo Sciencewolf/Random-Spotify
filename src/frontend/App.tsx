@@ -16,14 +16,15 @@ function App() {
         return (
             <>
                 <Main />
-                <Footer />
             </>
         )
     }
     else if(window.location.href.includes("error=")){
+        window.location.hash = ''
         return (
             <>
-                <Error description={"Access Denied"} errorCode={403}/>
+                <Error description={"Access Denied. Login to continue."}
+                       errorCode={403}/>
                 <Login />
             </>
         )

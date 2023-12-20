@@ -6,18 +6,26 @@ import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
 import getPlaylistIDs from "./PlaylistIDs.ts";
 import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
+import Footer from "../frontend/Footer.tsx";
+import Error from "../frontend/Error.tsx";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
+
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
     const [songArtist, setSongArtist] = useState("")
+
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImg, setPlaylistImg] = useState("")
+
     const [followersArtist, setFollowersArtist] = useState("")
     const [followersPlaylist, setFollowersPlaylist] = useState("")
     const [artistImg, setArtistImg] = useState("")
+
+    const [checkError, setCheckError] = useState(false)
+
     const [title, setTitle] = useState("")
 
     const getToken = () => {
@@ -28,12 +36,13 @@ function Main(): JSX.Element {
 
         if(window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
             window.localStorage.setItem("token", getTokenAfterLogin)
+            window.location.hash = ''
         }else {
             window.location.hash = ''
         }
     }
 
-    const userInfo = async() => {
+    async function userInfo() {
         try {
             const response = await fetch('https://api.spotify.com/v1/me', {
                 headers: {
@@ -42,18 +51,19 @@ function Main(): JSX.Element {
             })
 
             if(!response.ok) {
-                console.log("Error: "  + response.status)
+                setCheckError(true)
+                return;
             }
 
             const getJson = await response.json()
             setUserName(getJson['display_name'])
             setUserIcon(getJson['images'][0]['url'])
         }catch (err) {
-            console.log(err)
+            setCheckError(true)
         }
     }
 
-    const playlist = async () => {
+    async function playlist() {
         const [...playlistIDs] = getPlaylistIDs()
         const randomID = Math.floor(Math.random() * playlistIDs.length)
         try {
@@ -64,7 +74,7 @@ function Main(): JSX.Element {
             })
 
             if (!response.ok) {
-                console.log("Error: " + response.status);
+                setCheckError(true)
                 return;
             }
 
@@ -82,11 +92,11 @@ function Main(): JSX.Element {
             setPlaylistImg(getJson['images'][0]['url'])
             setFollowersPlaylist(getJson['followers']['total'])
         } catch (err) {
-            console.log(err);
+            setCheckError(true)
         }
-    };
+    }
 
-    const aboutArtist = async(id: string) => {
+    async function aboutArtist(id: string){
         try {
             const response = await fetch(`https://api.spotify.com/v1/artists/${id}`, {
                 headers: {
@@ -94,13 +104,18 @@ function Main(): JSX.Element {
                 }
             })
 
+            if(!response.ok) {
+                setCheckError(true)
+                return;
+            }
+
             const getJson = await response.json()
 
             setArtistImg(getJson['images'][1]['url'])
             setFollowersArtist(getJson['followers']['total'])
 
         }catch (err) {
-            console.log(err)
+            setCheckError(true)
         }
     }
 
@@ -109,7 +124,7 @@ function Main(): JSX.Element {
             const response = ''
             console.log(response)
         }catch (err) {
-            console.log(err)
+            setCheckError(true)
         }
     }
 
@@ -130,28 +145,49 @@ function Main(): JSX.Element {
 
     return (
         <>
-            {!isMobileVersion() ? (
+            {checkError ? (
                 <>
-                    <UpdateLoginButton userIcon={userIcon}
-                                       userName={userName}
-                    />
-                    <AboutTheArtist artistName={songArtist}
-                                    artistImg={artistImg}
-                                    followers={followersArtist + " followers"}
-                    />
-                    <UpdateSkeleton songImg={songImg}
-                                    songName={songName}
-                                    songArtist={songArtist}
-                    />
-                    <ShowPlaylistOfSong playlistImg={playlistImg}
-                                        playlistName={playlistName}
-                                        followers={followersPlaylist}
-                    />
-                    <UpdateTitle _title={title}
-                    />
+                    <Error description={"Error. Refresh the page."}
+                           errorCode={404} />
                 </>
+
             ) : (
-                <></>
+                !isMobileVersion() ? (
+                    <>
+                        <UpdateLoginButton userIcon={userIcon}
+                                           userName={userName}
+                        />
+                        <AboutTheArtist artistName={songArtist}
+                                        artistImg={artistImg}
+                                        followers={followersArtist + " followers"}
+                        />
+                        <UpdateSkeleton songImg={songImg}
+                                        songName={songName}
+                                        songArtist={songArtist}
+                        />
+                        <ShowPlaylistOfSong playlistImg={playlistImg}
+                                            playlistName={playlistName}
+                                            followers={followersPlaylist}
+                        />
+                        <Footer/>
+                        <UpdateTitle _title={title}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <UpdateLoginButton userIcon={userIcon}
+                                           userName={userName}
+                        />
+                        <UpdateSkeleton songImg={songImg}
+                                        songName={songName}
+                                        songArtist={songArtist}
+                        />
+                        <AboutTheArtist artistName={songArtist}
+                                        artistImg={artistImg}
+                                        followers={followersArtist + " followers"}
+                        />
+                    </>
+                )
             )}
         </>
     )

@@ -1,13 +1,14 @@
 import '../style/Error.css'
+import Props from "../backend/Props.ts";
 
 function error({description, errorCode}: Props) {
 
     return (
         <div className={'error-div'}
              id={'error-div'}>
-            <h3 id={'error-h3'}>
+            <h2 id={'error-h2'}>
                 {description}
-            </h3>
+            </h2>
             <img src={`https://http.cat/images/${errorCode}.jpg`}
                  alt={'error-img'}
                  id={'error-img'}/>

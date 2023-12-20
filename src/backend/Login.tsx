@@ -3,7 +3,7 @@ import '../style/Login.css'
 function Login() {
     const client_id = import.meta.env.VITE_CLIENT_ID;
     const redirect_uri = import.meta.env.VITE_PRODUCTION
-    const auth_point = "https://accounts.spotify.com/authorize"
+    const auth_point = import.meta.env.VITE_AUTH_POINT
     const response_type = "token"
 
     return (
