@@ -9,6 +9,7 @@ import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import Footer from "../frontend/Footer.tsx";
 import Error from "../frontend/Error.tsx";
 import isMobileVersion from "./isMobileVersion.ts";
+import Login from "./Login.tsx";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -54,8 +55,6 @@ function Main(): JSX.Element {
             console.log(response)
 
             if(!response.ok) {
-                alert('error @ 55')
-                alert(response.status)
                 setCheckError(true)
                 return;
             }
@@ -64,7 +63,6 @@ function Main(): JSX.Element {
             setUserName(getJson['display_name'])
             setUserIcon(getJson['images'][0]['url'])
         }catch (err) {
-            alert('error @ 64')
             setCheckError(true)
         }
     }
@@ -80,8 +78,6 @@ function Main(): JSX.Element {
             })
 
             if (!response.ok) {
-                alert('error @ 80')
-                alert(response.status)
                 setCheckError(true)
                 return;
             }
@@ -100,7 +96,6 @@ function Main(): JSX.Element {
             setPlaylistImg(getJson['images'][0]['url'])
             setFollowersPlaylist(getJson['followers']['total'])
         } catch (err) {
-            alert('error @ 99')
             setCheckError(true)
         }
     }
@@ -114,7 +109,6 @@ function Main(): JSX.Element {
             })
 
             if(!response.ok) {
-                alert('error @ 113')
                 setCheckError(true)
                 return;
             }
@@ -125,7 +119,6 @@ function Main(): JSX.Element {
             setFollowersArtist(getJson['followers']['total'])
 
         }catch (err) {
-            alert('error @ 124')
             setCheckError(true)
         }
     }
@@ -135,7 +128,6 @@ function Main(): JSX.Element {
             const response = ''
             console.log(response)
         }catch (err) {
-            alert('error @ 134')
             setCheckError(true)
         }
     }
@@ -157,6 +149,7 @@ function Main(): JSX.Element {
                 <>
                     <Error description={"Refresh the page"}
                            errorCode={404} />
+                    <Login />
                 </>
 
             ) : (
@@ -193,6 +186,7 @@ function Main(): JSX.Element {
                                         artistImg={artistImg}
                                         followers={followersArtist + " followers"}
                         />
+                        <UpdateTitle _title={title}/>
                     </>
                 )
             )}

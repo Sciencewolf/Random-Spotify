@@ -8,7 +8,8 @@ function error({description, errorCode}: Props) {
             <h2 id={'error-h2'}>
                 {description}
                 <br />
-                {"Login to continue"}
+                {errorCode === 404 ? "" : "Login to continue"}
+                {""}
             </h2>
             <img src={`https://http.cat/images/${errorCode}.jpg`}
                  alt={'error-img'}
