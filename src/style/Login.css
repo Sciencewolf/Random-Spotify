@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    position: fixed;
+    position: absolute;
     top: 10px;
     right: 50px;
     transition: .3s all;
@@ -65,18 +65,14 @@
 
 @media screen and (max-width: 768px) {
     .login {
-        width: 100px;
         height: 40px;
         right: 10px;
+        position: absolute;
     }
 
     .login img {
         width: 40px;
         height: 40px;
-    }
-
-    #logout {
-        display: none;
     }
 }
 

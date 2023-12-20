@@ -1,4 +1,4 @@
-.span-footer {
+.footer {
     position: absolute;
     bottom: 0;
     right: 1em;
@@ -19,9 +19,9 @@ a:visited {
 }
 
 @media screen and (max-width: 768px) {
-    position: static;
-    bottom: unset;
-    right: unset;
+    .footer {
+        position: unset;
+    }
 }
 
 @media (hover: hover) {

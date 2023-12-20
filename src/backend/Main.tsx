@@ -10,6 +10,7 @@ import Footer from "../frontend/Footer.tsx";
 import Error from "../frontend/Error.tsx";
 import isMobileVersion from "./isMobileVersion.ts";
 import Login from "./Login.tsx";
+import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -179,6 +180,7 @@ function Main(): JSX.Element {
                         <UpdateLoginButton userIcon={userIcon}
                                            userName={userName}
                         />
+                        <ShowPlaylistOnMobile playlistName={playlistName} />
                         <UpdateSkeleton songImg={songImg}
                                         songName={songName}
                                         songArtist={songArtist}
