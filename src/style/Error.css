@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
+    gap: 3em;
     flex-direction: column;
 }
 
@@ -14,4 +14,15 @@
 #error-h2 {
     text-align: center;
     width: auto;
+}
+
+@media screen and (max-width: 768px) {
+    #error-img {
+        width: 400px;
+        height: 300px;
+    }
+
+    #error-h2 {
+        width: 300px;
+    }
 }

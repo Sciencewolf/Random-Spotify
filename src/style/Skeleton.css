@@ -34,11 +34,6 @@
     background-color: white;
 }
 
-#previous-button:hover, #play-button:hover, #next-button:hover {
-    transition: all .3s ease-in-out;
-    transform: scale(1.05);
-}
-
 #previous-button, #next-button {
     display: flex;
     align-items: center;
@@ -87,4 +82,18 @@
 
 ::-webkit-scrollbar-thumb {
     background: lightgrey;
+}
+
+@media screen and (max-width: 768px) {
+    .skeleton-div {
+        flex-direction: column;
+        width: 300px;
+    }
+}
+
+@media (hover: hover) {
+    #previous-button:hover, #play-button:hover, #next-button:hover {
+        transition: all .3s ease-in-out;
+        transform: scale(1.05);
+    }
 }
