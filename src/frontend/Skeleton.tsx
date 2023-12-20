@@ -9,7 +9,7 @@ function Skeleton() {
         <>
             {clicked ? (
                 <>
-                    <Error description={"Unauthorized. Login to continue."} errorCode={401} />
+                    <Error description={"Unauthorized"} errorCode={401} />
                 </>
             ) : (
                 <>

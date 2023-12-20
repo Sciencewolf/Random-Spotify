@@ -8,6 +8,7 @@ import getPlaylistIDs from "./PlaylistIDs.ts";
 import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import Footer from "../frontend/Footer.tsx";
 import Error from "../frontend/Error.tsx";
+import isMobileVersion from "./isMobileVersion.ts";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -139,10 +140,6 @@ function Main(): JSX.Element {
         fetchData().catch(err => console.log(err))
     }, []);
 
-    const isMobileVersion = () => {
-        return /Android|iPhone/.test(window.navigator.userAgent)
-    }
-
     return (
         <>
             {checkError ? (
@@ -170,8 +167,7 @@ function Main(): JSX.Element {
                                             followers={followersPlaylist}
                         />
                         <Footer/>
-                        <UpdateTitle _title={title}
-                        />
+                        <UpdateTitle _title={title} />
                     </>
                 ) : (
                     <>

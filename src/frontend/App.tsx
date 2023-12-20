@@ -4,12 +4,22 @@ import Login from "../backend/Login.tsx";
 import Footer from "./Footer.tsx";
 import Main from "../backend/Main.tsx";
 import Error from "./Error.tsx";
+import isMobileVersion from "../backend/isMobileVersion.ts";
 
 
 function App() {
     window.onbeforeunload = function() {
         window.localStorage.removeItem("token")
         return;
+    }
+
+    if(isMobileVersion()) {
+        return (
+            <>
+                <Login />
+                <Skeleton />
+            </>
+        )
     }
 
     if(window.location.href.includes('access_token=')) {
@@ -23,7 +33,7 @@ function App() {
         window.location.hash = ''
         return (
             <>
-                <Error description={"Access Denied. Login to continue."}
+                <Error description={"Access Denied"}
                        errorCode={403}/>
                 <Login />
             </>
