@@ -1,7 +1,10 @@
-function updateTitle(props: {_title: string}) {
-    const title = document.getElementById('title')
+import {Props} from "../backend/Props.ts";
+
+function updateTitle({title}: Props) {
+    const titleElem: HTMLElement | null = document.getElementById('title')
+
     // @ts-ignore
-    title.innerHTML = props._title
+    title !== undefined ? titleElem.innerHTML = title : titleElem.innerHTML = 'Random Spotify'
 
     return (
         <>

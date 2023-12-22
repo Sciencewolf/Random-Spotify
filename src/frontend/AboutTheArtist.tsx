@@ -1,8 +1,8 @@
 import '../style/aboutArtist.css'
-import Props from "../backend/Props.ts";
+import {ArtistProps} from "../backend/Props.ts";
 
 
-function aboutTheArtist({artistName, artistImg, followers}: Props) {
+function aboutTheArtist({artistName, artistImg, followersArtist}: ArtistProps) {
     return (
         <>
             <div className={"aboutArtist-div"}
@@ -23,7 +23,7 @@ function aboutTheArtist({artistName, artistImg, followers}: Props) {
                        userSelect: "none"
                    }}
                 >
-                    {followers}
+                    {followersArtist}
                 </p>
             </div>
         </>

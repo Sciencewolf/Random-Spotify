@@ -1,6 +1,6 @@
-import Props from "../backend/Props.ts";
+import {SongProps} from "../backend/Props.ts";
 
-function UpdateSkeleton({ songImg, songName, songArtist }: Props): JSX.Element {
+function UpdateSkeleton({ songImg, songName, songArtist }: SongProps): JSX.Element {
     const params: object = {
         width: 'unset',
         height: 'unset',

@@ -2,10 +2,9 @@ import '../style/App.css'
 import Skeleton from "./Skeleton.tsx";
 import Login from "../backend/Login.tsx";
 import Footer from "./Footer.tsx";
-import Main from "../backend/Main.tsx";
 import Error from "./Error.tsx";
 import isMobileVersion from "../backend/isMobileVersion.ts";
-
+import Main from "../backend/Main.tsx";
 
 function App() {
     window.onbeforeunload = function() {

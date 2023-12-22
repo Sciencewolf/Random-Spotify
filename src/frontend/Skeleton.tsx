@@ -30,7 +30,8 @@ function Skeleton() {
                         <div className={"controllers"}
                              id={"controllers"}
                         >
-                            <button className={"previous-button"}
+                            <button type={"button"}
+                                    className={"previous-button"}
                                     id={"previous-button"}
                             >
                                 <img src={"https://img.icons8.com/windows/32/backward-button.png"}
@@ -38,7 +39,8 @@ function Skeleton() {
                                      id={"previous-button-img"}
                                 />
                             </button>
-                            <button className={"play-button"}
+                            <button type={"button"}
+                                    className={"play-button"}
                                     id={"play-button"}
                                     onClick={() => {
                                         setClicked(true)
@@ -62,7 +64,6 @@ function Skeleton() {
                     </div>
                 </>
             )}
-
         </>
     )
 }

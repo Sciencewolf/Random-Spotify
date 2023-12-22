@@ -1,6 +1,6 @@
-import Props from "../backend/Props.ts";
+import {PlaylistProps} from "../backend/Props.ts";
 
-function showPlaylistOnMobile({playlistName}: Props) {
+function showPlaylistOnMobile({playlistName}: PlaylistProps) {
     return (
         <>
             <div className={"playlist-name"}>

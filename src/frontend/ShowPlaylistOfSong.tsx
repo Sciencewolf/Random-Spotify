@@ -1,7 +1,7 @@
 import '../style/playlistOfSong.css'
-import Props from "../backend/Props.ts";
+import {PlaylistProps} from "../backend/Props.ts";
 
-function showPlaylistOfSong({playlistImg, playlistName, followers}: Props) {
+function showPlaylistOfSong({playlistImg, playlistName, followersPlaylist}: PlaylistProps) {
     return (
         <>
             <div className={"showPlaylistOfSong-div"}
@@ -21,7 +21,7 @@ function showPlaylistOfSong({playlistImg, playlistName, followers}: Props) {
                        userSelect: "none"
                    }}
                 >
-                    {followers} followers
+                    {followersPlaylist} followers
                 </p>
             </div>
         </>

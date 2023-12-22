@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import '../style/Login.css'
-import Props from "../backend/Props.ts";
+import {UserProps} from "../backend/Props.ts";
 
-function UpdateLoginButton({ userIcon, userName }: Props): JSX.Element {
+function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleLogout = () => {
