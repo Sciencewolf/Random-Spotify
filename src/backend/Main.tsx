@@ -10,6 +10,7 @@ import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
+    const [userID, setUserID] = useState('')
 
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
@@ -44,7 +45,6 @@ function Main(): JSX.Element {
             }
             window.location.hash = ''
         }
-        console.log(1)
     }
 
     async function userInfo() {
@@ -61,9 +61,10 @@ function Main(): JSX.Element {
             }
 
             const getJson = await response.json()
+
             setUserName(getJson.display_name)
             setUserIcon(getJson.images[0].url)
-            console.log(2)
+            setUserID(getJson.id)
         } catch (err) {
             setCheckError(true)
         }
@@ -85,9 +86,8 @@ function Main(): JSX.Element {
             }
 
             const getJson = await response.json();
-            console.log(getJson)
 
-            const firstTrack = getJson.tracks.items[0];
+            const firstTrack = getJson.tracks.items[1];
             await aboutArtist(firstTrack.track.artists[0].id)
 
             setSongName(firstTrack.track.name);
@@ -98,8 +98,6 @@ function Main(): JSX.Element {
             setPlaylistName(getJson.name)
             setPlaylistImg(getJson.images[0].url)
             setFollowersPlaylist(getJson.followers.total)
-            setToken(`${window.localStorage.getItem('token')}`)
-            console.log(3)
         } catch (err) {
             setCheckError(true)
         }
@@ -122,21 +120,22 @@ function Main(): JSX.Element {
 
             setArtistImg(getJson.images[1].url)
             setFollowersArtist(getJson.followers.total)
-            console.log(4)
 
         } catch (err) {
             setCheckError(true)
         }
     }
 
-    async function player() {
+    async function play() {
         try {
-            const response = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
+            const response = await fetch(`https://api.spotify.com/v1/me/player/play`,
+                {
                 headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
+                    'Authorization': `Bearer ${window.localStorage.getItem("token")}`,
+                    'Content-Type': 'application/json'
                 },
-                method: 'GET',
-                redirect: 'follow'
+                method: 'PUT',
+                body: JSON.stringify({uris: [`${songUri}`], position_ms: 0})
             })
 
             if(!response.ok) {
@@ -144,25 +143,46 @@ function Main(): JSX.Element {
             }
 
             const data = await response.json()
+            console.log(response.status)
             console.log(data)
-            console.log(5)
 
         }catch (err) {
             console.log(err)
         }
     }
 
-    async function fetchData(){
+    async function pause() {
+        try {
+            const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
+                headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem("token")}`,
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
+                body: JSON.stringify({uri: `${songUri}`, position_ms: 0})
+            })
+
+            if(!response.ok) {
+                console.log('not ok')
+            }
+
+            console.log('ok')
+
+        }catch (err) {
+            console.log(err)
+        }
+    }
+
+    function fetchData(){
         getToken()
         userInfo().catch(err => console.log(err))
         playlist().catch(err => console.log(err))
-        player().catch(err => console.log(err))
-        console.log(6)
+        play().catch(err => console.log(err))
     }
 
     useEffect(() => {
-        fetchData().catch(err => console.log(err))
-        console.log(7)
+        fetchData()
+        setToken(`${window.localStorage.getItem('token')}`)
     }, []);
 
     return (
