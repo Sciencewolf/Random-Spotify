@@ -16,7 +16,9 @@
     "colorthief": "^2.4.0",
     "fast-average-color": "^9.4.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-spotify-web-playback": "^0.14.1",
+    "spotify-web-api-js": "^1.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

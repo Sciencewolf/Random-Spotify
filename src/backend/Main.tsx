@@ -5,7 +5,7 @@ import Error from "../frontend/Error.tsx";
 import isMobileVersion from "./isMobileVersion.ts";
 import UpdateDesktop from "./UpdateDesktop.tsx";
 import UpdateMobile from "./UpdateMobile.tsx";
-import SetBackgroundColor from "./SetBackgroundColor.tsx";
+import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 
 function Main(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -14,6 +14,7 @@ function Main(): JSX.Element {
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
     const [songArtist, setSongArtist] = useState("")
+    const [songUri, setSongUri] = useState('')
 
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImg, setPlaylistImg] = useState("")
@@ -24,9 +25,11 @@ function Main(): JSX.Element {
 
     const [checkError, setCheckError] = useState(false)
 
+    const [token, setToken] = useState("")
+
     const [title, setTitle] = useState("")
 
-    const getToken = () => {
+    function getToken() {
         const getTokenAfterLogin: string = window.location.href
             .split("#")[1]
             .split("&")[0]
@@ -41,6 +44,7 @@ function Main(): JSX.Element {
             }
             window.location.hash = ''
         }
+        console.log(1)
     }
 
     async function userInfo() {
@@ -59,6 +63,7 @@ function Main(): JSX.Element {
             const getJson = await response.json()
             setUserName(getJson.display_name)
             setUserIcon(getJson.images[0].url)
+            console.log(2)
         } catch (err) {
             setCheckError(true)
         }
@@ -80,6 +85,7 @@ function Main(): JSX.Element {
             }
 
             const getJson = await response.json();
+            console.log(getJson)
 
             const firstTrack = getJson.tracks.items[0];
             await aboutArtist(firstTrack.track.artists[0].id)
@@ -88,9 +94,12 @@ function Main(): JSX.Element {
             setSongArtist(firstTrack.track.artists[0].name)
             setTitle(firstTrack.track.artists[0].name + ' - ' + firstTrack.track.name)
             setSongImg(firstTrack.track.album.images[1].url);
+            setSongUri(firstTrack.track.uri)
             setPlaylistName(getJson.name)
             setPlaylistImg(getJson.images[0].url)
             setFollowersPlaylist(getJson.followers.total)
+            setToken(`${window.localStorage.getItem('token')}`)
+            console.log(3)
         } catch (err) {
             setCheckError(true)
         }
@@ -113,6 +122,7 @@ function Main(): JSX.Element {
 
             setArtistImg(getJson.images[1].url)
             setFollowersArtist(getJson.followers.total)
+            console.log(4)
 
         } catch (err) {
             setCheckError(true)
@@ -121,33 +131,38 @@ function Main(): JSX.Element {
 
     async function player() {
         try {
-            // const response = await fetch(`https://api.spotify.com/v1/me/player`, {
-            //     headers: {
-            //         Authorization: `Bearer ${window.localStorage.getItem("token")}`
-            //     }
-            // })
-            //
-            // if(!response.ok) {
-            //     setCheckError(true)
-            //     return
-            // }
-            //
-            // const data = await response.json()
-            console.log(1)
-        } catch (err) {
-            setCheckError(true)
+            const response = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
+                },
+                method: 'GET',
+                redirect: 'follow'
+            })
+
+            if(!response.ok) {
+                console.log('not ok')
+            }
+
+            const data = await response.json()
+            console.log(data)
+            console.log(5)
+
+        }catch (err) {
+            console.log(err)
         }
     }
 
-    const fetchData = async () => {
+    async function fetchData(){
         getToken()
         userInfo().catch(err => console.log(err))
         playlist().catch(err => console.log(err))
         player().catch(err => console.log(err))
+        console.log(6)
     }
 
     useEffect(() => {
         fetchData().catch(err => console.log(err))
+        console.log(7)
     }, []);
 
     return (
