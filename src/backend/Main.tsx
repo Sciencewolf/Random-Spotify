@@ -151,38 +151,40 @@ function Main(): JSX.Element {
         }
     }
 
-    async function pause() {
-        try {
-            const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
-                headers: {
-                    'Authorization': `Bearer ${window.localStorage.getItem("token")}`,
-                    'Content-Type': 'application/json'
-                },
-                method: 'PUT',
-                body: JSON.stringify({uri: `${songUri}`, position_ms: 0})
-            })
-
-            if(!response.ok) {
-                console.log('not ok')
-            }
-
-            console.log('ok')
-
-        }catch (err) {
-            console.log(err)
-        }
-    }
+    // async function pause() {
+    //     try {
+    //         const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${window.localStorage.getItem("token")}`,
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             method: 'PUT',
+    //             body: JSON.stringify({uri: `${songUri}`, position_ms: 0})
+    //         })
+    //
+    //         if(!response.ok) {
+    //             console.log('not ok')
+    //         }
+    //
+    //         console.log(response.status)
+    //
+    //     }catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     function fetchData(){
         getToken()
         userInfo().catch(err => console.log(err))
         playlist().catch(err => console.log(err))
         play().catch(err => console.log(err))
+        // pause().catch(err => console.log(err))
     }
 
     useEffect(() => {
         fetchData()
         setToken(`${window.localStorage.getItem('token')}`)
+        console.log(userID, token)
     }, []);
 
     return (
