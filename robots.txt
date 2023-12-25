@@ -1,0 +1,5 @@
+User-Agent: *
+
+Allow: /
+
+Sitemap: https://random-spotify.vercel.app/sitemap.xml
