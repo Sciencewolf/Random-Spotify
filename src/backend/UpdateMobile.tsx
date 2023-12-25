@@ -9,7 +9,7 @@ function updateMobile({
                       userIcon, userName,
                       playlistName, songImg,
                       songName, songArtist,
-                      artistImg, followersArtist
+                      artistImg, followersArtist, token
     }: UserProps & PlaylistProps & SongProps & ArtistProps & Props) {
 
     return (
@@ -21,6 +21,7 @@ function updateMobile({
             <UpdateSkeleton songImg={songImg}
                             songName={songName}
                             songArtist={songArtist}
+                            token={token}
             />
             <AboutTheArtist artistName={songArtist}
                             artistImg={artistImg}
