@@ -4,7 +4,7 @@ import Login from "../backend/Login.tsx";
 import Footer from "./Footer.tsx";
 import Error from "./Error.tsx";
 import isMobileVersion from "../backend/isMobileVersion.ts";
-import Main from "../backend/Main.tsx";
+import LoadComponents from "../backend/LoadComponents.tsx";
 
 function App() {
     window.onbeforeunload = function() {
@@ -15,7 +15,7 @@ function App() {
     if(window.location.href.includes('access_token=')) {
         return (
             <>
-                <Main />
+                <LoadComponents />
             </>
         )
     }

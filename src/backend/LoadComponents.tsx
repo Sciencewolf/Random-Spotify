@@ -7,7 +7,9 @@ import UpdateDesktop from "./UpdateDesktop.tsx";
 import UpdateMobile from "./UpdateMobile.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 
-function Main(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
     const [userID, setUserID] = useState('')
@@ -35,6 +37,7 @@ function Main(): JSX.Element {
             .split("#")[1]
             .split("&")[0]
             .split('=')[1];
+        console.log(userID, token, songUri) //
 
         if (window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
             window.localStorage.setItem("token", getTokenAfterLogin)
@@ -97,7 +100,18 @@ function Main(): JSX.Element {
             setSongUri(firstTrack.track.uri)
             setPlaylistName(getJson.name)
             setPlaylistImg(getJson.images[0].url)
-            setFollowersPlaylist(getJson.followers.total)
+
+            // TODO: refactor into slicing, maybe it would be better
+            let follows: string = ''
+            const total: number = +getJson.followers.total
+
+            if(total >= 1_000_000) {
+                follows = String((total / 1_000_000)
+                    .toPrecision(2))
+                    .replace('.', ',') + 'M'
+            }
+
+            setFollowersPlaylist(follows)
         } catch (err) {
             setCheckError(true)
         }
@@ -119,37 +133,54 @@ function Main(): JSX.Element {
             const getJson = await response.json()
 
             setArtistImg(getJson.images[1].url)
-            setFollowersArtist(getJson.followers.total)
+
+            let follows: string = ''
+            const total: number = +getJson.followers.total
+
+            if(total < 100_000) {
+                follows = String((total / 1_000)
+                    .toPrecision(2))
+                    .replace('.', ',') + 'K'
+            }
+            else if(total < 1_000_000) {
+                follows = String((total / 1_000)
+                    .toPrecision(3)
+                    .replace('.', ',')) + 'K'
+            }
+            else {
+                follows = String((total / 1_000_000)
+                    .toPrecision(3))
+                    .replace('.', ',') + 'M'
+            }
+            setFollowersArtist(follows)
 
         } catch (err) {
             setCheckError(true)
         }
     }
 
-    async function play() {
-        try {
-            const response = await fetch(`https://api.spotify.com/v1/me/player/play`,
-                {
-                headers: {
-                    'Authorization': `Bearer ${window.localStorage.getItem("token")}`,
-                    'Content-Type': 'application/json'
-                },
-                method: 'PUT',
-                body: JSON.stringify({uris: [`${songUri}`], position_ms: 0})
-            })
-
-            if(!response.ok) {
-                console.log('not ok')
-            }
-
-            const data = await response.json()
-            console.log(response.status)
-            console.log(data)
-
-        }catch (err) {
-            console.log(err)
-        }
-    }
+    // async function play() {
+    //     try {
+    //         const response = await fetch(`https://api.spotify.com/v1/me/player/play`,
+    //             {
+    //             headers: {
+    //                 'Authorization': `Bearer ${window.localStorage.getItem("token")}`,
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             method: 'PUT',
+    //             body: JSON.stringify({uris: [`${songUri}`], position_ms: 0})
+    //         })
+    //
+    //         if(!response.ok) {
+    //             console.log('not ok')
+    //         }
+    //
+    //         console.log(response.status)
+    //
+    //     }catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     // async function pause() {
     //     try {
@@ -173,18 +204,17 @@ function Main(): JSX.Element {
     //     }
     // }
 
-    function fetchData(){
+    function fetchData() {
         getToken()
         userInfo().catch(err => console.log(err))
         playlist().catch(err => console.log(err))
-        play().catch(err => console.log(err))
+        // play().catch(err => console.log(err))
         // pause().catch(err => console.log(err))
     }
 
     useEffect(() => {
         fetchData()
         setToken(`${window.localStorage.getItem('token')}`)
-        console.log(userID, token)
     }, []);
 
     return (
@@ -216,7 +246,6 @@ function Main(): JSX.Element {
                         />
                         <SetBackgroundColor link={songImg}/>
                     </>
-
                 ) : (
                     <>
                         <UpdateMobile userIcon={userIcon}
@@ -242,4 +271,6 @@ function Main(): JSX.Element {
     )
 }
 
-export default Main;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+export default LoadComponents
