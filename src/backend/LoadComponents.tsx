@@ -7,8 +7,7 @@ import UpdateDesktop from "./UpdateDesktop.tsx";
 import UpdateMobile from "./UpdateMobile.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
 function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
@@ -17,7 +16,7 @@ function LoadComponents(): JSX.Element {
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
     const [songArtist, setSongArtist] = useState("")
-    const [songUri, setSongUri] = useState('')
+    const [songUri, setSongUri] = useState(['spotify:track:7KmbiagSkUbepU88x7NWjb'])
 
     const [playlistName, setPlaylistName] = useState("")
     const [playlistImg, setPlaylistImg] = useState("")
@@ -97,7 +96,7 @@ function LoadComponents(): JSX.Element {
             setSongArtist(firstTrack.track.artists[0].name)
             setTitle(firstTrack.track.artists[0].name + ' - ' + firstTrack.track.name)
             setSongImg(firstTrack.track.album.images[1].url);
-            setSongUri(firstTrack.track.uri)
+            setSongUri((oldState) => [...oldState, firstTrack.track.uri])
             setPlaylistName(getJson.name)
             setPlaylistImg(getJson.images[0].url)
 
@@ -168,7 +167,7 @@ function LoadComponents(): JSX.Element {
     //                 'Content-Type': 'application/json'
     //             },
     //             method: 'PUT',
-    //             body: JSON.stringify({uris: [`${songUri}`], position_ms: 0})
+    //             body: JSON.stringify({uris: [`${songUri[0]}`], position_ms: 0})
     //         })
     //
     //         if(!response.ok) {
@@ -210,6 +209,7 @@ function LoadComponents(): JSX.Element {
         playlist().catch(err => console.log(err))
         // play().catch(err => console.log(err))
         // pause().catch(err => console.log(err))
+        console.log(window.navigator.userAgent)
     }
 
     useEffect(() => {
@@ -241,6 +241,8 @@ function LoadComponents(): JSX.Element {
                                        playlistImg={playlistImg}
                                        playlistName={playlistName}
                                        followersPlaylist={followersPlaylist}
+                                       token={token}
+                                       songUri={songUri}
 
                                        title={title}
                         />
@@ -272,5 +274,4 @@ function LoadComponents(): JSX.Element {
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 export default LoadComponents

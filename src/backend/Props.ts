@@ -4,6 +4,7 @@ export type Props = {
     title?: string | undefined
     update?: boolean
     updateUserProfile?: boolean
+    token?: string | undefined
 }
 
 export type SongProps =  {
@@ -27,4 +28,5 @@ export type PlaylistProps = {
     playlistImg?: string
     playlistName?: string
     followersPlaylist?: string
+    songUri?: string[]
 }
