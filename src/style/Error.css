@@ -7,8 +7,8 @@
 }
 
 #error-img {
-    width: 750px;
-    height: 600px;
+    width: 650px;
+    height: 500px;
 }
 
 #error-h2 {
@@ -17,6 +17,10 @@
 }
 
 @media screen and (max-width: 768px) {
+    .error-div {
+        gap: 0;
+    }
+
     #error-img {
         width: 400px;
         height: 300px;
