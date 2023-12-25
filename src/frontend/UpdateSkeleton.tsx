@@ -13,8 +13,6 @@ function UpdateSkeleton({ songImg, songName, songArtist, token }: SongProps & Pl
     const [isPaused, setIsPaused] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
-    // const [tracks, setTracks] = useState(songUris)
-
     useEffect(() => {
         const script = document.createElement('script')
         script.src = 'https://sdk.scdn.co/spotify-player.js'
@@ -43,7 +41,9 @@ function UpdateSkeleton({ songImg, songName, songArtist, token }: SongProps & Pl
             })
 
             player.addListener('player_state_changed', (state) => {
-                if(!state) return
+                if(!state) {
+                    return;
+                }
 
                 setIsPaused(state.paused)
 
@@ -102,10 +102,20 @@ function UpdateSkeleton({ songImg, songName, songArtist, token }: SongProps & Pl
                                 // @ts-expect-error
                                 _player.togglePlay()}}
                     >
-                        <img src={"https://img.icons8.com/windows/32/play--v1.png"}
-                             alt={"play-btn"}
-                             id={"play-button-img"}
-                        />
+                        {isPaused ?
+                            <img width="32"
+                                 height="32"
+                                 src={"https://img.icons8.com/ios/50/pause--v1.png"}
+                                 alt="pause-btn"
+                                 id={"play-button-img"} />
+                            :
+                            <img width={"32"}
+                                 height={"32"}
+                                 src={"https://img.icons8.com/windows/32/play--v1.png"}
+                                 alt={"play-btn"}
+                                 id={"play-button-img"} />
+                        }
+
                     </button>
                     <button type={"button"}
                             id={"next-button"}

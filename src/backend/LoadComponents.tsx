@@ -7,11 +7,9 @@ import UpdateDesktop from "./UpdateDesktop.tsx";
 import UpdateMobile from "./UpdateMobile.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 
-
 function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
-    const [userID, setUserID] = useState('')
 
     const [songImg, setSongImg] = useState("")
     const [songName, setSongName] = useState("")
@@ -36,7 +34,7 @@ function LoadComponents(): JSX.Element {
             .split("#")[1]
             .split("&")[0]
             .split('=')[1];
-        console.log(userID, token, songUri) //
+        console.log(token, songUri) //
 
         if (window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
             window.localStorage.setItem("token", getTokenAfterLogin)
@@ -66,7 +64,6 @@ function LoadComponents(): JSX.Element {
 
             setUserName(getJson.display_name)
             setUserIcon(getJson.images[0].url)
-            setUserID(getJson.id)
         } catch (err) {
             setCheckError(true)
         }
@@ -209,7 +206,6 @@ function LoadComponents(): JSX.Element {
         playlist().catch(err => console.log(err))
         // play().catch(err => console.log(err))
         // pause().catch(err => console.log(err))
-        console.log(window.navigator.userAgent)
     }
 
     useEffect(() => {
