@@ -1,21 +1,32 @@
 .footer {
     position: absolute;
     bottom: 0;
-    right: 1em;
+    right: 50%;
+    transform: translateX(+50%);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
+    gap: 0.5em;
+    background-color: lightgrey;
+    padding: 0.5em;
+    color: black !important;
+    width: 100vh;
+}
+
+#heart {
+    color: red !important;
+}
+
+#dev a{
+    color: firebrick;
 }
 
 a {
-    text-decoration: none;
-    color: white;
+    color: crimson;
 }
 
 a:visited {
     color: white;
-    text-decoration: none;
 }
 
 @media screen and (max-width: 768px) {
