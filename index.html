@@ -1,1 +1,81 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"><meta name="theme-color" content="black" id="meta-theme"><meta name="keywords" content="spotify, Spotify, random spotify, random song"><meta name="description" content="Listen random song's from Spotify. Dev Marton Aron"><link rel="icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png"><title id="title">Random Spotify</title><script async src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script><meta property="og:title" content="Random Spotify"><meta property="og:type" content="website"><meta property="og:description" content="Listen random song's from Spotify"><meta property="og:image" content="https://img.icons8.com/cute-clipart/128/music.png"><meta property="og:url" content="https://random-spotify.vercel.app"><link rel="shortcut icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png"><link rel="apple-touch-icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png"><link rel="apple-touch-startup-image" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png"></head><body id="body"><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <meta name="theme-color" content="black" id="meta-theme">
+    <meta name="keywords" content="spotify, Spotify, random spotify, random song">
+    <meta name="description" content="Listen random song's from Spotify. Dev Marton Aron">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
+    <title id="title">Random Spotify</title>
+    <script async src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script async src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script>
+    <meta property="og:title" content="Random Spotify">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Listen random song's from Spotify">
+    <meta property="og:image" content="https://img.icons8.com/cute-clipart/128/music.png">
+    <meta property="og:url" content="https://random-spotify.vercel.app">
+    <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
+    <link rel="apple-touch-icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
+    <link rel="apple-touch-startup-image" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
+</head>
+<body id="body">
+<div id="root"></div>
+<input type="range" min="0" max="100" value="50" id="range">
+<script type="module" src="/src/main.tsx"></script>
+<script>
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        const player = new Spotify.Player({
+            getOAuthToken: cb => {
+                cb(`${window.localStorage.getItem('token')}`)
+            },
+            name: 'Web Player (Random Spotify)',
+            volume: 0.5
+        })
+
+        player.addListener('ready', ({device_id}) => {
+            console.log('ready at', device_id)
+        })
+
+        player.addListener('not_ready', ({device_id}) => {
+            console.log('not ready at', device_id)
+        })
+
+        player.addListener('player_state_changed', (state) => {
+            if (!state) {
+                return;
+            }
+
+            player.getCurrentState()
+                .then(state => {
+                        (!state) ? console.log(state) : console.log(state)
+                    }
+                )
+        })
+
+        player.connect()
+
+        const previous_btn = document.getElementById('previous-button')
+        previous_btn.addEventListener('click', () => {
+            player.previousTrack()
+        })
+
+        const play_btn = document.getElementById('play-button')
+        play_btn.addEventListener('click', () => {
+            player.togglePlay()
+        })
+
+        const next_btn = document.getElementById('next-button')
+        next_btn.addEventListener('click', () => {
+            player.nextTrack()
+        })
+
+        const range = document.getElementById('range')
+        range.addEventListener('change', () => {
+            player.setVolume(range.value / 100)
+        })
+    }
+
+</script>
+</body>
+</html>
