@@ -6,13 +6,11 @@ function footer() {
             <footer className={"footer"}
                     id={"footer"}>
                 <span>
-                    <a href="https://github.com/Sciencewolf">
-                        [GitHub]
-                    </a>
+                    Developed with <span id={"heart"}>❤️</span> by
                 </span>
-                <span>Icon's from
-                    <a href="https://icons8.com">
-                        [Icons8]
+                <span id={"dev"}>
+                    <a href="https://github.com/Sciencewolf" target={"_blank"}>
+                        Aron Marton
                     </a>
                 </span>
             </footer>

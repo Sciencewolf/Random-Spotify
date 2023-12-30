@@ -63,7 +63,6 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps & PlaylistP
             </div>
         </>
     )
-        ;
 }
 
 export default UpdateSkeleton;

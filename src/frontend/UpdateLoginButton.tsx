@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../style/Login.css'
+import '../style/User.css'
 import {UserProps} from "../backend/Props.ts";
 
 function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
@@ -20,8 +20,8 @@ function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
 
     return (
         <div
-            id="login"
-            className="login"
+            id="user"
+            className="user"
             style={{
                 width: '200px',
                 gap: '1em',
