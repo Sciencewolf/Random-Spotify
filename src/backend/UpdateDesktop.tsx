@@ -10,7 +10,7 @@ function updateDesktop({userIcon, userName,
                        artistName, artistImg, followersArtist,
                        songImg, songName, songArtist,
                        playlistImg, playlistName, followersPlaylist,
-                       token, title}: UserProps & ArtistProps & SongProps & PlaylistProps & Props) {
+                       title}: UserProps & ArtistProps & SongProps & PlaylistProps & Props) {
     return (
         <>
             <UpdateLoginButton userIcon={userIcon}
@@ -23,7 +23,6 @@ function updateDesktop({userIcon, userName,
             <UpdateSkeleton songImg={songImg}
                             songName={songName}
                             songArtist={songArtist}
-                            token={token}
             />
             <ShowPlaylistOfSong playlistImg={playlistImg}
                                 playlistName={playlistName}
