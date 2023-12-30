@@ -4,7 +4,7 @@ export type Props = {
     title?: string | undefined
     update?: boolean
     updateUserProfile?: boolean
-    token?: string | undefined
+    token?: string | undefined | null
 }
 
 export type SongProps =  {
