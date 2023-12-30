@@ -29,5 +29,6 @@ body {
     flex-direction: column;
     margin-top: 100px;
     overflow-x: hidden;
+    gap: 2em;
   }
 }
