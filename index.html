@@ -1,28 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!-- required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
     <meta name="theme-color" content="black" id="meta-theme">
     <meta name="keywords" content="spotify, Spotify, random spotify, random song">
     <meta name="description" content="Listen random song's from Spotify. Dev Marton Aron">
+
+    <!-- favicon -->
     <link rel="icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
+
+    <!-- title -->
     <title id="title">Random Spotify</title>
+
+    <!-- JS file -->
     <script async src="https://sdk.scdn.co/spotify-player.js"></script>
     <script async src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script>
+
+    <!-- Open Graph meta tags when sharing the webpage -->
     <meta property="og:title" content="Random Spotify">
     <meta property="og:type" content="website">
     <meta property="og:description" content="Listen random song's from Spotify">
     <meta property="og:image" content="https://img.icons8.com/cute-clipart/128/music.png">
     <meta property="og:url" content="https://random-spotify.vercel.app">
+
+    <!--for Apple Safari -->
     <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
     <link rel="apple-touch-icon" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
     <link rel="apple-touch-startup-image" type="image/png" href="https://img.icons8.com/cute-clipart/64/music.png">
+
 </head>
 <body id="body">
 <div id="root"></div>
-<input type="range" min="0" max="100" value="50" id="range">
 <script type="module" src="/src/main.tsx"></script>
+
 <script>
     window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new Spotify.Player({
