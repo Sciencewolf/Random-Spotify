@@ -26,16 +26,13 @@ body {
 
 @media screen and (max-width: 768px) {
   #root {
+    margin-top: 50px;
     flex-direction: column;
     overflow-x: hidden;
     gap: 3em;
-    display: flex;
-    justify-content: center;
-    align-items: start;
   }
   
   .footer, .footer-after {
     position: unset;
-
   }
 }

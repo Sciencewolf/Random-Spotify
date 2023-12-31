@@ -11,7 +11,7 @@
     border-radius: 10px;
     transition: .3s all;
     position: absolute;
-    top: 0;
+    top: 0.5em;
     right: 1em;
 }
 
