@@ -2,10 +2,10 @@ import {useEffect, useState} from "react";
 import '../style/Skeleton.css'
 import getPlaylistIDs from "./PlaylistIDs.ts";
 import Error from "../frontend/Error.tsx";
-import isMobileVersion from "./isMobileVersion.ts";
 import UpdateDesktop from "./UpdateDesktop.tsx";
 import UpdateMobile from "./UpdateMobile.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
+import {isMobileVersion} from "./isMobileVersion";
 
 function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
