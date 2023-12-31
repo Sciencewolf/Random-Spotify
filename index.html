@@ -36,13 +36,19 @@
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
 
-<script>
+<script type="module">
+    import UAParser from "ua-parser-js";
+
+    const browser = new UAParser();
+    console.log(browser.getResult())
     window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new Spotify.Player({
             getOAuthToken: cb => {
                 cb(`${window.localStorage.getItem('token')}`)
             },
-            name: 'Web Player (Random Spotify)',
+            name: /Android|iPhone/.test(window.navigator.userAgent)
+                ? `Random Spotify (${browser.getBrowser().name}, ${browser.getOS().name})`
+                : `Random Spotify (${browser.getBrowser().name}, ${browser.getOS().name})`,
             volume: 0.5
         })
 
@@ -83,12 +89,11 @@
             player.nextTrack()
         })
 
-        const range = document.getElementById('range')
-        range.addEventListener('change', () => {
-            player.setVolume(range.value / 100)
-        })
+        // const range = document.getElementById('range')
+        // range.addEventListener('change', () => {
+        //     player.setVolume(range.value / 100)
+        // })
     }
-
 </script>
 </body>
 </html>
