@@ -4,6 +4,7 @@ import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import {ArtistProps, PlaylistProps, Props, SongProps, UserProps} from "./Props.ts";
+import Footer from "../frontend/Footer.tsx";
 
 function updateDesktop({userIcon, userName,
                        artistName, artistImg, followersArtist,
@@ -28,6 +29,7 @@ function updateDesktop({userIcon, userName,
                                 followersPlaylist={followersPlaylist}
             />
             <UpdateTitle title={title} />
+            <Footer isChangeFooterClassName={true}/>
         </>
     )
 

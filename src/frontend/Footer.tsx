@@ -1,9 +1,9 @@
 import '../style/Footer.css'
 
-function footer() {
+function footer(props: {isChangeFooterClassName: boolean}) {
     return (
         <>
-            <footer className={"footer"}
+            <footer className={props.isChangeFooterClassName ? "footer-after" : "footer"}
                     id={"footer"}>
                 <span>
                     Developed with <span id={"heart"}>❤️</span> by

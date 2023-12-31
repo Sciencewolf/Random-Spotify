@@ -27,7 +27,7 @@ function updateMobile({
                             artistImg={artistImg}
                             followersArtist={followersArtist + " followers"}
             />
-            <Footer/>
+            <Footer isChangeFooterClassName={true}/>
         </>
     )
 }
