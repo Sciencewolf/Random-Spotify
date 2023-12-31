@@ -6,11 +6,11 @@ import Footer from "../frontend/Footer.tsx";
 import {ArtistProps, PlaylistProps, Props, SongProps, UserProps} from "./Props.ts";
 
 function updateMobile({
-                      userIcon, userName,
-                      playlistName, songImg,
-                      songName, songArtist,
-                      artistImg, followersArtist, token
-    }: UserProps & PlaylistProps & SongProps & ArtistProps & Props) {
+                          userIcon, userName,
+                          playlistName, songImg,
+                          songName, songArtist,
+                          artistImg, followersArtist, token
+                      }: UserProps & PlaylistProps & SongProps & ArtistProps & Props) {
 
     return (
         <>
@@ -27,7 +27,7 @@ function updateMobile({
                             artistImg={artistImg}
                             followersArtist={followersArtist + " followers"}
             />
-            <Footer />
+            <Footer/>
         </>
     )
 }
