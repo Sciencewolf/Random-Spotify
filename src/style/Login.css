@@ -28,16 +28,6 @@
     color: black;
 }
 
-.login img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.login:has(h3) {
-    user-select: none;
-}
-
 #logout {
     width: 200px;
     height: 50px;
@@ -55,21 +45,11 @@
     border: 0;
 }
 
-#user-name {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 @media screen and (max-width: 768px) {
-    .login {
-        height: 40px;
-        right: 10px;
-        position: absolute;
+    #body {
+        overflow: hidden;
     }
-
-    .login img {
-        width: 40px;
+    .login {
         height: 40px;
     }
 }
@@ -77,15 +57,6 @@
 @media (hover: hover) {
     #logout:hover {
         text-decoration: none;
-    }
-
-    .login:has(h3):hover {
-        color: white;
-    }
-
-    .login:has(img):hover {
-        text-decoration: none;
-        background-color: limegreen;
     }
 
     .login:hover {

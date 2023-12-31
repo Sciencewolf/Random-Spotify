@@ -31,7 +31,9 @@ a:visited {
 
 @media screen and (max-width: 768px) {
     .footer {
-        position: unset;
+        width: 100vw;
+        height: 1em;
+        text-align: center;
     }
 }
 
