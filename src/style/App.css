@@ -33,4 +33,9 @@ body {
     justify-content: center;
     align-items: start;
   }
+  
+  .footer, .footer-after {
+    position: unset;
+
+  }
 }
