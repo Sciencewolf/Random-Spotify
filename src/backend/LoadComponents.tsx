@@ -29,6 +29,9 @@ function LoadComponents(): JSX.Element {
 
     const [title, setTitle] = useState("")
 
+    const body = document.querySelector('body')!
+    body.id = 'body-after'
+
     function getToken() {
         const getTokenAfterLogin: string = window.location.href
             .split("#")[1]
