@@ -40,7 +40,7 @@
     import UAParser from "ua-parser-js";
 
     const browser = new UAParser();
-    console.log(browser.getResult())
+
     window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new Spotify.Player({
             getOAuthToken: cb => {
