@@ -23,9 +23,9 @@ function LoadComponents(): JSX.Element {
     const [followersPlaylist, setFollowersPlaylist] = useState("")
     const [artistImg, setArtistImg] = useState("")
 
-    const [checkError, setCheckError] = useState(false)
+    const [device, setDevice] = useState('')
 
-    const [token, setToken] = useState("")
+    const [checkError, setCheckError] = useState(false)
 
     const [title, setTitle] = useState("")
 
@@ -37,7 +37,7 @@ function LoadComponents(): JSX.Element {
             .split("#")[1]
             .split("&")[0]
             .split('=')[1];
-        console.log(token, songUri) //
+        console.log(songUri) //
 
 
         if (window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
@@ -159,16 +159,64 @@ function LoadComponents(): JSX.Element {
         }
     }
 
-    function fetchData() {
-        getToken()
-        userInfo().catch(err => console.log(err))
-        playlist().catch(err => console.log(err))
+    async function getDeviceID() {
+        const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`
+            }
+        })
+
+        if(!response.ok) {
+            console.log('error', response.status)
+            return
+        }
+
+        const data = await response.json()
+
+        // TODO: handle multiple devices but now just handle one device
+        setDevice(data.devices[0].id)
+    }
+
+    async function transferPlayback() {
+        const response = await fetch('https://api.spotify.com/v1/me/player', {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`
+            },
+            method: 'PUT',
+            body: JSON.stringify({"device_ids": [device]})
+        })
+
+        if(!response.ok) {
+            console.log('error', response.status)
+        }
+
+    }
+
+    async function play() {
+        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`
+            },
+            method: 'PUT',
+            body: JSON.stringify({'uris': [...songUri], 'position_ms': 0})
+        })
+
+        if (!response.ok) {
+            console.log('error', response.status)
+            return
+        }
     }
 
     useEffect(() => {
-        fetchData()
-        setToken(`${window.localStorage.getItem('token')}`)
+        getToken()
+        userInfo().catch(err => console.log(err))
+        playlist().catch(err => console.log(err))
 
+        const load = async() => {
+            await Promise.all([getDeviceID(), transferPlayback(), play()])
+        }
+
+        load().then(r => console.log(r)).catch(e => console.log(e))
     }, []);
 
     return (
