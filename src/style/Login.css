@@ -22,6 +22,7 @@
     text-decoration: none;
     border-radius: 10px;
     font-size: 1.5rem;
+    color: black;
 }
 
 .login-a:visited {
