@@ -20,6 +20,7 @@ function Login() {
 
     return (
         <>
+            {redirect_uri === import.meta.env.VITE_PRODUCTION ? console.clear() : ""}
             <div className={"login"}
                  id={"login"}>
                 <a href={`${auth_point}?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes}&response_type=${response_type}&show_dialog=true`}
