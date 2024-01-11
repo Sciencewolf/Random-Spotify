@@ -2,6 +2,7 @@ import '../style/App.css'
 import Login from "../backend/Login.tsx";
 import Footer from "./Footer.tsx";
 import Error from "./Error.tsx";
+import LoadSpotifyWebPlayback from "../backend/LoadSpotifyWebPlayback.tsx";
 import LoadComponents from "../backend/LoadComponents.tsx";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     if(window.location.href.includes('access_token=')) {
         return (
             <>
+                <LoadSpotifyWebPlayback />
                 <LoadComponents />
             </>
         )

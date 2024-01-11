@@ -1,36 +1,51 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import '../style/Skeleton.css'
 import getPlaylistIDs from "./PlaylistIDs.ts";
 import Error from "../frontend/Error.tsx";
-import UpdateDesktop from "./UpdateDesktop.tsx";
-import UpdateMobile from "./UpdateMobile.tsx";
-import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 import {isMobileVersion} from "./isMobileVersion";
+import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
+import transferPlayback from "./transferPlayback.ts";
 
 function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
 
-    const [songImg, setSongImg] = useState("")
-    const [songName, setSongName] = useState("")
-    const [songArtist, setSongArtist] = useState("")
     const [songUri, setSongUri] = useState(['spotify:track:7KmbiagSkUbepU88x7NWjb'])
-
-    const [playlistName, setPlaylistName] = useState("")
-    const [playlistImg, setPlaylistImg] = useState("")
-
-    const [followersArtist, setFollowersArtist] = useState("")
-    const [followersPlaylist, setFollowersPlaylist] = useState("")
-    const [artistImg, setArtistImg] = useState("")
 
     const [device, setDevice] = useState('')
 
     const [checkError, setCheckError] = useState(false)
-
-    const [title, setTitle] = useState("")
+    const [logError, setLogError] = useState('')
 
     const body = document.querySelector('body')!
     body.id = 'body-after'
+
+    // for play func, default is 1, http404 error, acceptable 0, http204 ok
+    const rerun = useRef(1)
+    const ref = rerun.current
+
+    // TODO: load only static components,
+    //  transferring and playing is in LoadSpotify... component
+    useEffect(() => {
+        const loadData = async() => {
+            try {
+                getToken()
+                await Promise.all([
+                    userInfo(),
+                    playlist(),
+                    getDeviceID(),
+                    transferPlayback(device),
+                    play()
+                ])
+                console.log(logError, device)
+            }catch (err) {
+                console.log(err)
+            }
+        }
+
+        loadData()
+
+    }, [ref]);
 
     function getToken() {
         const getTokenAfterLogin: string = window.location.href
@@ -61,6 +76,7 @@ function LoadComponents(): JSX.Element {
 
             if (!response.ok) {
                 setCheckError(true)
+                setLogError((oldState) => oldState + 'error at 65')
                 return;
             }
 
@@ -70,6 +86,7 @@ function LoadComponents(): JSX.Element {
             setUserIcon(getJson.images[0].url)
         } catch (err) {
             setCheckError(true)
+            setLogError((oldState) => oldState + 'error at 75')
         }
     }
 
@@ -85,6 +102,7 @@ function LoadComponents(): JSX.Element {
 
             if (!response.ok) {
                 setCheckError(true)
+                setLogError((oldState) => oldState + 'error at 91')
                 return;
             }
 
@@ -93,13 +111,7 @@ function LoadComponents(): JSX.Element {
             const firstTrack = getJson.tracks.items[1];
             await aboutArtist(firstTrack.track.artists[0].id)
 
-            setSongName(firstTrack.track.name);
-            setSongArtist(firstTrack.track.artists[0].name)
-            setTitle(firstTrack.track.artists[0].name + ' - ' + firstTrack.track.name)
-            setSongImg(firstTrack.track.album.images[1].url);
             setSongUri((oldState) => [...oldState, firstTrack.track.uri])
-            setPlaylistName(getJson.name)
-            setPlaylistImg(getJson.images[0].url)
 
             // TODO: refactor into slicing, maybe it would be better
             let follows: string = ''
@@ -109,11 +121,12 @@ function LoadComponents(): JSX.Element {
                 follows = String((total / 1_000_000)
                     .toPrecision(2))
                     .replace('.', ',') + 'M'
-            }
 
-            setFollowersPlaylist(follows)
+                console.log(follows)
+            }
         } catch (err) {
             setCheckError(true)
+            setLogError((oldState) => oldState + 'error at 121')
         }
     }
 
@@ -127,12 +140,11 @@ function LoadComponents(): JSX.Element {
 
             if (!response.ok) {
                 setCheckError(true)
+                setLogError((oldState) => oldState + 'error at 135')
                 return;
             }
 
             const getJson = await response.json()
-
-            setArtistImg(getJson.images[1].url)
 
             let follows: string = ''
             const total: number = +getJson.followers.total
@@ -151,11 +163,12 @@ function LoadComponents(): JSX.Element {
                 follows = String((total / 1_000_000)
                     .toPrecision(3))
                     .replace('.', ',') + 'M'
+                console.log(follows)
             }
-            setFollowersArtist(follows)
 
         } catch (err) {
             setCheckError(true)
+            setLogError((oldState) => oldState + 'error at 165')
         }
     }
 
@@ -172,24 +185,21 @@ function LoadComponents(): JSX.Element {
         }
 
         const data = await response.json()
+        console.log(data)
 
         // TODO: handle multiple devices but now just handle one device
-        setDevice(data.devices[0].id)
-    }
+        if(data.devices.length > 1) {
 
-    async function transferPlayback() {
-        const response = await fetch('https://api.spotify.com/v1/me/player', {
-            headers: {
-                Authorization: `Bearer ${window.localStorage.getItem("token")}`
-            },
-            method: 'PUT',
-            body: JSON.stringify({"device_ids": [device]})
-        })
-
-        if(!response.ok) {
-            console.log('error', response.status)
+            console.log('>1')
+            for (const dev in data.devices){
+                console.log(data.devices[dev].name, data.devices[dev].id)
+                if(data.devices[dev].name.includes('Random Spotify')){
+                    setDevice(data.devices[dev].id)
+                }
+            }
+        }else {
+            setDevice(data.devices[0].id)
         }
-
     }
 
     async function play() {
@@ -205,19 +215,8 @@ function LoadComponents(): JSX.Element {
             console.log('error', response.status)
             return
         }
+        else rerun.current = rerun.current - 1
     }
-
-    useEffect(() => {
-        getToken()
-        userInfo().catch(err => console.log(err))
-        playlist().catch(err => console.log(err))
-
-        const load = async() => {
-            await Promise.all([getDeviceID(), transferPlayback(), play()])
-        }
-
-        load().then(r => console.log(r)).catch(e => console.log(e))
-    }, []);
 
     return (
         <>
@@ -227,52 +226,13 @@ function LoadComponents(): JSX.Element {
                            errorCode={404}/>
                 </>
             ) : (
-                !isMobileVersion() ? (
-                    <>
-                        <UpdateDesktop userIcon={userIcon}
-                                       userName={userName}
-
-                                       artistName={songArtist}
-                                       artistImg={artistImg}
-                                       followersArtist={followersArtist}
-
-                                       songImg={songImg}
-                                       songName={songName}
-                                       songArtist={songArtist}
-
-                                       playlistImg={playlistImg}
-                                       playlistName={playlistName}
-                                       followersPlaylist={followersPlaylist}
-                                       songUri={songUri}
-
-                                       title={title}
-                        />
-                        <SetBackgroundColor link={songImg}/>
-                    </>
-                ) : (
-                    <>
-                        <UpdateMobile userIcon={userIcon}
-                                      userName={userName}
-
-                                      songImg={songImg}
-                                      songName={songName}
-                                      songArtist={songArtist}
-
-                                      artistName={songArtist}
-                                      artistImg={artistImg}
-                                      followersArtist={followersArtist}
-
-                                      playlistName={playlistName}
-                                      playlistImg={playlistImg}
-                                      followersPlaylist={followersPlaylist}
-                        />
-                        <SetBackgroundColor link={songImg}/>
-                    </>
-                )
+                <>
+                    <UpdateLoginButton userIcon={userIcon}
+                                       userName={userName} />
+                </>
             )}
         </>
     )
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 export default LoadComponents

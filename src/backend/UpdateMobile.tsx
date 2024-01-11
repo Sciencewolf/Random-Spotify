@@ -1,22 +1,16 @@
-import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
 import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import Footer from "../frontend/Footer.tsx";
-import {ArtistProps, PlaylistProps, Props, SongProps, UserProps} from "./Props.ts";
+import {ArtistProps, PlaylistProps, Props, SongProps} from "./Props.ts";
 
-function updateMobile({
-                          userIcon, userName,
-                          playlistName, songImg,
+function updateMobile({playlistName, songImg,
                           songName, songArtist,
                           artistImg, followersArtist, token
-                      }: UserProps & PlaylistProps & SongProps & ArtistProps & Props) {
+                      }: PlaylistProps & SongProps & ArtistProps & Props) {
 
     return (
         <>
-            <UpdateLoginButton userIcon={userIcon}
-                               userName={userName}
-            />
             <ShowPlaylistOnMobile playlistName={playlistName}/>
             <UpdateSkeleton songImg={songImg}
                             songName={songName}

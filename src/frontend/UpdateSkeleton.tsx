@@ -1,5 +1,4 @@
 import {PlaylistProps, Props, SongProps} from "../backend/Props.ts";
-import handleControllers from "../backend/handleControllers.ts";
 
 function UpdateSkeleton({ songImg, songName, songArtist }: SongProps & PlaylistProps & Props): JSX.Element {
     const params: object = {
@@ -7,26 +6,6 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps & PlaylistP
         height: 'unset',
         backgroundColor: 'unset',
     }
-
-    // const [isPaused, setIsPaused] = useState(false)
-
-    const playNext = () => {
-        handleControllers({option: "next"}).catch(err => console.log(err))
-    }
-
-    const playPrevious = () => {
-        handleControllers({option: "previous"}).catch(err => console.log(err))
-    }
-
-    // const pause = () => {
-    //     handleControllers({option: "pause"}).catch(err => console.log(err))
-    //     setIsPaused(true)
-    // }
-
-    // const play = () => {
-    //     handleControllers({option: "play"}).catch(err => console.log(err))
-    //     setIsPaused(false)
-    // }
 
     return (
         <>
@@ -54,9 +33,6 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps & PlaylistP
                      id={"controllers"}>
                     <button className={"previous-button"}
                             id={"previous-button"}
-                            onClick={() => {
-                                playPrevious()
-                            }}
                     >
                         <img src={"https://img.icons8.com/windows/32/backward-button.png"}
                              alt={"previous-btn"}
@@ -77,9 +53,6 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps & PlaylistP
                     <button type={"button"}
                             id={"next-button"}
                             className={"next-button"}
-                            onClick={() => {
-                                playNext()
-                            }}
                     >
                         <img
                             src={"https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/24/external-next-multimedia-tanah-basah-basic-outline-tanah-basah.png"}
