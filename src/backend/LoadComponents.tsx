@@ -1,10 +1,9 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import '../style/Skeleton.css'
 import getPlaylistIDs from "./PlaylistIDs.ts";
 import Error from "../frontend/Error.tsx";
 import {isMobileVersion} from "./isMobileVersion";
 import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
-import transferPlayback from "./transferPlayback.ts";
 
 function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -20,10 +19,6 @@ function LoadComponents(): JSX.Element {
     const body = document.querySelector('body')!
     body.id = 'body-after'
 
-    // for play func, default is 1, http404 error, acceptable 0, http204 ok
-    const rerun = useRef(1)
-    const ref = rerun.current
-
     // TODO: load only static components,
     //  transferring and playing is in LoadSpotify... component
     useEffect(() => {
@@ -34,8 +29,6 @@ function LoadComponents(): JSX.Element {
                     userInfo(),
                     playlist(),
                     getDeviceID(),
-                    transferPlayback(device),
-                    play()
                 ])
                 console.log(logError, device)
             }catch (err) {
@@ -43,9 +36,9 @@ function LoadComponents(): JSX.Element {
             }
         }
 
-        loadData()
+        loadData().then(res => console.log(res)).then(err => console.log(err))
 
-    }, [ref]);
+    }, []);
 
     function getToken() {
         const getTokenAfterLogin: string = window.location.href
@@ -92,7 +85,7 @@ function LoadComponents(): JSX.Element {
 
     async function playlist() {
         const [...playlistIDs] = getPlaylistIDs()
-        const randomID = Math.floor(Math.random() * playlistIDs.length)
+        const randomID: number = Math.floor(Math.random() * playlistIDs.length)
         try {
             const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistIDs[randomID]}`, {
                 headers: {
@@ -200,22 +193,6 @@ function LoadComponents(): JSX.Element {
         }else {
             setDevice(data.devices[0].id)
         }
-    }
-
-    async function play() {
-        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
-            headers: {
-                Authorization: `Bearer ${window.localStorage.getItem("token")}`
-            },
-            method: 'PUT',
-            body: JSON.stringify({'uris': [...songUri], 'position_ms': 0})
-        })
-
-        if (!response.ok) {
-            console.log('error', response.status)
-            return
-        }
-        else rerun.current = rerun.current - 1
     }
 
     return (
