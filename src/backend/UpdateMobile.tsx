@@ -2,7 +2,7 @@
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 // import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import Footer from "../frontend/Footer.tsx";
-import {ArtistProps, PlaylistProps, Props, SongProps} from "./Props.ts";
+import {Props, SongProps} from "./Props.ts";
 
 function updateMobile({
                           // playlistName,
@@ -10,7 +10,7 @@ function updateMobile({
                           songName, songArtist,
                           // artistImg, followersArtist,
                           token
-                      }: PlaylistProps & SongProps & ArtistProps & Props) {
+                      }: SongProps & Props) {
 
     return (
         <>

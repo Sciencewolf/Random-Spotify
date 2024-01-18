@@ -1,10 +1,10 @@
 import UAParser from "ua-parser-js";
 import {useEffect, useState} from "react";
-import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import UpdateDesktop from "./UpdateDesktop.tsx";
 import {isMobileVersion} from "./isMobileVersion";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
+import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 
 // TODO: implement all functions inside this component
 // TODO: update desktop or mobile components
@@ -13,19 +13,14 @@ function useLoadSpotifyWebPlayback() {
     const [songArtist, setSongArtist] = useState('')
     const [songName, setSongName] = useState('')
 
-    const [artistImg, setArtistImg] = useState("")
-    const [followersArtist, setFollowersArtist] = useState("")
-
-    const [playlistName, setPlaylistName] = useState("")
-    const [playlistImg, setPlaylistImg] = useState("")
-    const [followersPlaylist, setFollowersPlaylist] = useState("")
-
     const [log, setLog] = useState('')
 
     let base: string | null | Spotify.Track = ''
 
     useEffect(() => {
         const browser = new UAParser();
+        const playButtonImage: HTMLImageElement =
+            document.querySelector('#play-button #play-button-img')!
 
         window.onSpotifyWebPlaybackSDKReady = async () => {
             const player = new Spotify.Player({
@@ -57,16 +52,10 @@ function useLoadSpotifyWebPlayback() {
                             : (
                                 console.log(state),
                                 base = state.track_window.current_track,
-
                                 setSongName(base.name),
                                 setSongImg(String(base.album.images[0].url)),
                                 setSongArtist(String(base.artists[0].name)),
-                                console.log(log),
-                                setArtistImg(''),
-                                setFollowersArtist(''),
-                                setPlaylistName(''),
-                                setPlaylistImg(''),
-                                setFollowersPlaylist('')
+                                console.log(log)
                             )
                         }
                     )
@@ -82,6 +71,7 @@ function useLoadSpotifyWebPlayback() {
 
             play_btn.addEventListener('click', () => {
                 player.togglePlay()
+                playButtonImage.src = 'https://img.icons8.com/ios-glyphs/30/circled-play.png'
             })
 
             next_btn.addEventListener('click', () => {
@@ -89,7 +79,7 @@ function useLoadSpotifyWebPlayback() {
             })
 
             player.connect()
-                .then(() => {})
+                .then((r) => {console.log(r)})
                 .catch(err => console.log(err))
 
             window.onbeforeunload = () => {
@@ -104,26 +94,19 @@ function useLoadSpotifyWebPlayback() {
             {!isMobileVersion()
                 ? (
                     <>
-                        <UpdateDesktop artistName={songArtist}
-                                       artistImg={artistImg}
-                                       followersArtist={followersArtist}
-                                       songImg={songImg}
+                        <UpdateDesktop songImg={songImg}
                                        songName={songName}
                                        songArtist={songArtist}
-                                       playlistName={playlistName}
-                                       playlistImg={playlistImg}
-                                       followersPlaylist={followersPlaylist}/>
-                        <UpdateTitle title={songName + '-' + songArtist}/>
+                                       title={songName + ' -  ' + songArtist}/>
+                        <SetBackgroundColor link={songImg} />
                     </>
                 )
                 : (
                     <>
                         <UpdateMobile songImg={songImg}
                                       songName={songName}
-                                      songArtist={songArtist}
-                                      artistName={songArtist}
-                                      artistImg={artistImg}
-                                      followersArtist={followersArtist}/>
+                                      songArtist={songArtist}/>
+                        <SetBackgroundColor link={songImg} />
                     </>
                 )}
 

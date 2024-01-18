@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import '../style/Skeleton.css'
-import getPlaylistIDs from "./PlaylistIDs.ts";
+// import getPlaylistIDs from "./PlaylistIDs.ts";
 import Error from "../frontend/Error.tsx";
 import {isMobileVersion} from "./isMobileVersion";
 import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
@@ -9,7 +9,7 @@ function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
     const [userName, setUserName] = useState("")
 
-    const [songUri, setSongUri] = useState(['spotify:track:7KmbiagSkUbepU88x7NWjb'])
+    // const [songUri, setSongUri] = useState(['spotify:track:7KmbiagSkUbepU88x7NWjb'])
 
     const [device, setDevice] = useState('')
 
@@ -27,7 +27,7 @@ function LoadComponents(): JSX.Element {
                 getToken()
                 await Promise.all([
                     userInfo(),
-                    playlist(),
+                    // playlist(),
                     getDeviceID(),
                 ])
                 console.log(logError, device)
@@ -45,8 +45,6 @@ function LoadComponents(): JSX.Element {
             .split("#")[1]
             .split("&")[0]
             .split('=')[1];
-        console.log(songUri) //
-
 
         if (window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
             window.localStorage.setItem("token", getTokenAfterLogin)
@@ -83,87 +81,87 @@ function LoadComponents(): JSX.Element {
         }
     }
 
-    async function playlist() {
-        const [...playlistIDs] = getPlaylistIDs()
-        const randomID: number = Math.floor(Math.random() * playlistIDs.length)
-        try {
-            const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistIDs[randomID]}`, {
-                headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
-                }
-            })
-
-            if (!response.ok) {
-                setCheckError(true)
-                setLogError((oldState) => oldState + 'error at 91')
-                return;
-            }
-
-            const getJson = await response.json();
-
-            const firstTrack = getJson.tracks.items[1];
-            await aboutArtist(firstTrack.track.artists[0].id)
-
-            setSongUri((oldState) => [...oldState, firstTrack.track.uri])
-
-            // TODO: refactor into slicing, maybe it would be better
-            let follows: string = ''
-            const total: number = +getJson.followers.total
-
-            if(total >= 1_000_000) {
-                follows = String((total / 1_000_000)
-                    .toPrecision(2))
-                    .replace('.', ',') + 'M'
-
-                console.log(follows)
-            }
-        } catch (err) {
-            setCheckError(true)
-            setLogError((oldState) => oldState + 'error at 121')
-        }
-    }
-
-    async function aboutArtist(id: string) {
-        try {
-            const response = await fetch(`https://api.spotify.com/v1/artists/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
-                }
-            })
-
-            if (!response.ok) {
-                setCheckError(true)
-                setLogError((oldState) => oldState + 'error at 135')
-                return;
-            }
-
-            const getJson = await response.json()
-
-            let follows: string = ''
-            const total: number = +getJson.followers.total
-
-            if(total < 100_000) {
-                follows = String((total / 1_000)
-                    .toPrecision(2))
-                    .replace('.', ',') + 'K'
-            }
-            else if(total < 1_000_000) {
-                follows = String((total / 1_000)
-                    .toPrecision(3)
-                    .replace('.', ',')) + 'K'
-            }
-            else {
-                follows = String((total / 1_000_000)
-                    .toPrecision(3))
-                    .replace('.', ',') + 'M'
-                console.log(follows)
-            }
-
-        } catch (err) {
-            setCheckError(true)
-            setLogError((oldState) => oldState + 'error at 165')
-        }
-    }
+    // async function playlist() {
+    //     const [...playlistIDs] = getPlaylistIDs()
+    //     const randomID: number = Math.floor(Math.random() * playlistIDs.length)
+    //     try {
+    //         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistIDs[randomID]}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
+    //             }
+    //         })
+    //
+    //         if (!response.ok) {
+    //             setCheckError(true)
+    //             setLogError((oldState) => oldState + 'error at 91')
+    //             return;
+    //         }
+    //
+    //         const getJson = await response.json();
+    //
+    //         const firstTrack = getJson.tracks.items[1];
+    //         await aboutArtist(firstTrack.track.artists[0].id)
+    //
+    //         setSongUri((oldState) => [...oldState, firstTrack.track.uri])
+    //
+    //         // TODO: refactor into slicing, maybe it would be better
+    //         let follows: string = ''
+    //         const total: number = +getJson.followers.total
+    //
+    //         if(total >= 1_000_000) {
+    //             follows = String((total / 1_000_000)
+    //                 .toPrecision(2))
+    //                 .replace('.', ',') + 'M'
+    //
+    //             console.log(follows)
+    //         }
+    //     } catch (err) {
+    //         setCheckError(true)
+    //         setLogError((oldState) => oldState + 'error at 121')
+    //     }
+    // }
+    //
+    // async function aboutArtist(id: string) {
+    //     try {
+    //         const response = await fetch(`https://api.spotify.com/v1/artists/${id}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${window.localStorage.getItem("token")}`
+    //             }
+    //         })
+    //
+    //         if (!response.ok) {
+    //             setCheckError(true)
+    //             setLogError((oldState) => oldState + 'error at 135')
+    //             return;
+    //         }
+    //
+    //         const getJson = await response.json()
+    //
+    //         let follows: string = ''
+    //         const total: number = +getJson.followers.total
+    //
+    //         if(total < 100_000) {
+    //             follows = String((total / 1_000)
+    //                 .toPrecision(2))
+    //                 .replace('.', ',') + 'K'
+    //         }
+    //         else if(total < 1_000_000) {
+    //             follows = String((total / 1_000)
+    //                 .toPrecision(3)
+    //                 .replace('.', ',')) + 'K'
+    //         }
+    //         else {
+    //             follows = String((total / 1_000_000)
+    //                 .toPrecision(3))
+    //                 .replace('.', ',') + 'M'
+    //             console.log(follows)
+    //         }
+    //
+    //     } catch (err) {
+    //         setCheckError(true)
+    //         setLogError((oldState) => oldState + 'error at 165')
+    //     }
+    // }
 
     async function getDeviceID() {
         const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
