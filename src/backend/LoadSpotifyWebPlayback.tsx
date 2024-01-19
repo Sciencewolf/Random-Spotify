@@ -5,9 +5,9 @@ import {isMobileVersion} from "./isMobileVersion";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
+import {SpeedInsights} from "@vercel/speed-insights/react";
 
 // TODO: implement all functions inside this component
-// TODO: update desktop or mobile components
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
     const [songArtist, setSongArtist] = useState('')
@@ -133,6 +133,7 @@ function useLoadSpotifyWebPlayback() {
                                        title={songName + ' • ' + songArtist}
                         />
                         <SetBackgroundColor link={songImg}/>
+                        <SpeedInsights />
                     </>
                 )
                 : (
@@ -142,6 +143,7 @@ function useLoadSpotifyWebPlayback() {
                                       songArtist={songArtist}
                         />
                         <SetBackgroundColor link={songImg}/>
+                        <SpeedInsights />
                     </>
                 )}
 
