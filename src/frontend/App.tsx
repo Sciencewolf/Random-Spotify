@@ -9,12 +9,16 @@ import GetToken from "../backend/getToken.tsx";
 function App() {
     window.onbeforeunload = function() {
         window.localStorage.removeItem('token')
+        window.localStorage.setItem('load', 'true')
         return
     }
 
     if(window.location.href.includes('access_token=')) {
         return (
             <>
+                {window.localStorage.getItem('load') !== 'true'
+                    ? window.localStorage.setItem('load', 'true')
+                : <></>}
                 <GetToken />
                 <LoadSpotifyWebPlayback />
                 <LoadComponents />

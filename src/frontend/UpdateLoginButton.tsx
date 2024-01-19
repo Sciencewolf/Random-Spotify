@@ -7,6 +7,7 @@ function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
 
     const handleLogout = () => {
         window.localStorage.removeItem('token');
+        window.localStorage.setItem('load', 'true')
         window.location.href = import.meta.env.VITE_PRODUCTION;
     };
 

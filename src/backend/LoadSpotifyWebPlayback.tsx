@@ -17,6 +17,9 @@ function useLoadSpotifyWebPlayback() {
 
     let base: string | null | Spotify.Track = ''
 
+    const pauseIcon: string = 'https://assets.dryicons.com/uploads/icon/svg/9893/ef127c46-38b9-4cf5-bd27-4474e15b105c.svg'
+    const playIcon: string = 'https://img.icons8.com/windows/32/play--v1.png'
+
     useEffect(() => {
         const browser = new UAParser();
         const playButtonImage: HTMLImageElement =
@@ -64,7 +67,6 @@ function useLoadSpotifyWebPlayback() {
                                     setSongArtist(base.artists[0].name)
                                     for(let index = 1;index < base.artists.length;index++){
                                         const str = base.artists[index].name;
-                                        console.log(str)
                                         setSongArtist((oldState) => oldState + ', ' + str)
                                     }
                                 }
@@ -88,7 +90,14 @@ function useLoadSpotifyWebPlayback() {
 
             play_btn.addEventListener('click', () => {
                 player.togglePlay()
-                playButtonImage.src = 'https://img.icons8.com/ios-glyphs/30/circled-play.png'
+                if(playButtonImage.src === pauseIcon) {
+                    playButtonImage.src = playIcon
+                }else {
+                    playButtonImage.src = pauseIcon
+                    playButtonImage.style.width = '32px'
+                    playButtonImage.style.height = '32px'
+                }
+
             })
 
             next_btn.addEventListener('click', () => {
@@ -102,6 +111,7 @@ function useLoadSpotifyWebPlayback() {
                 .catch(err => console.log(err))
 
             window.onbeforeunload = () => {
+                window.localStorage.setItem('load', 'true')
                 player.disconnect()
             }
         }
@@ -120,7 +130,7 @@ function useLoadSpotifyWebPlayback() {
                         <UpdateDesktop songImg={songImg}
                                        songName={songName}
                                        songArtist={songArtist}
-                                       title={songName + ' -  ' + songArtist}
+                                       title={songName + ' • ' + songArtist}
                         />
                         <SetBackgroundColor link={songImg}/>
                     </>
