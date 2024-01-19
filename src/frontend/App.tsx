@@ -6,6 +6,7 @@ import LoadSpotifyWebPlayback from "../backend/LoadSpotifyWebPlayback.tsx";
 import LoadComponents from "../backend/LoadComponents.tsx";
 import GetToken from "../backend/getToken.tsx";
 import {SpeedInsights} from "@vercel/speed-insights/react";
+import {Analytics} from "@vercel/analytics/react";
 
 function App() {
     window.onbeforeunload = function() {
@@ -45,6 +46,7 @@ function App() {
                 <Login />
                 <Footer isChangeFooterClassName={false}/>
                 <SpeedInsights />
+                <Analytics />
             </>
         )
     }
