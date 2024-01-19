@@ -58,8 +58,20 @@ function useLoadSpotifyWebPlayback() {
                                 base = state.track_window.current_track;
                                 setSongName(base.name);
                                 setSongImg(String(base.album.images[0].url));
-                                setSongArtist(String(base.artists[0].name));
+                                if(base.artists.length === 1) {
+                                    setSongArtist(String(base.artists[0].name));
+                                }else {
+                                    setSongArtist(base.artists[0].name)
+                                    for(let index = 1;index < base.artists.length;index++){
+                                        const str = base.artists[index].name;
+                                        console.log(str)
+                                        setSongArtist((oldState) => oldState + ', ' + str)
+                                    }
+                                }
                                 console.log(log);
+                                if(window.localStorage.getItem('prod') === 'true'){
+                                    console.clear()
+                                }
                             }
                         }
                     }
