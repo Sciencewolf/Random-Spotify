@@ -4,6 +4,7 @@ import Footer from "./Footer.tsx";
 import Error from "./Error.tsx";
 import LoadSpotifyWebPlayback from "../backend/LoadSpotifyWebPlayback.tsx";
 import LoadComponents from "../backend/LoadComponents.tsx";
+import GetToken from "../backend/getToken.tsx";
 
 function App() {
     window.onbeforeunload = function() {
@@ -14,8 +15,10 @@ function App() {
     if(window.location.href.includes('access_token=')) {
         return (
             <>
+                <GetToken />
                 <LoadSpotifyWebPlayback />
                 <LoadComponents />
+                {/*<SetSongQueue />*/}
             </>
         )
     }

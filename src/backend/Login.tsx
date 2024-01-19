@@ -6,6 +6,8 @@ function Login() {
     const auth_point = import.meta.env.VITE_AUTH_POINT
     const response_type = "token"
 
+    window.localStorage.setItem('load', 'true')
+
     const scopes = [
         'streaming',
         'user-read-recently-played',
@@ -20,7 +22,12 @@ function Login() {
 
     return (
         <>
-            {redirect_uri === import.meta.env.VITE_PRODUCTION ? console.clear() : ""}
+            {redirect_uri === import.meta.env.VITE_PRODUCTION
+                ? (
+                    console.clear(),
+                    window.localStorage.setItem('prod', "true")
+                )
+                : window.localStorage.setItem('prod', "false")}
             <div className={"login"}
                  id={"login"}>
                 <a href={`${auth_point}?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes}&response_type=${response_type}&show_dialog=true`}

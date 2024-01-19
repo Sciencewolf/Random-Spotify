@@ -47,18 +47,23 @@ function useLoadSpotifyWebPlayback() {
                 }
 
                 player.getCurrentState().then(state => {
-                        (!state)
-                            ? setLog(oldState => oldState + 'error')
-                            : (
-                                console.log(state),
-                                base = state.track_window.current_track,
-                                setSongName(base.name),
-                                setSongImg(String(base.album.images[0].url)),
-                                setSongArtist(String(base.artists[0].name)),
-                                console.log(log)
-                            )
+                        if (!state) {
+                            setLog(oldState => oldState + 'error');
+                        } else {
+                            if (window.localStorage.getItem('load') === 'true') {
+                                play_btn.click();
+                                window.localStorage.setItem('load', 'false')
+                            } else {
+                                console.log(state, 'state');
+                                base = state.track_window.current_track;
+                                setSongName(base.name);
+                                setSongImg(String(base.album.images[0].url));
+                                setSongArtist(String(base.artists[0].name));
+                                console.log(log);
+                            }
                         }
-                    )
+                    }
+                )
             })
 
             const previous_btn = document.getElementById('previous-button') as HTMLButtonElement
@@ -79,34 +84,42 @@ function useLoadSpotifyWebPlayback() {
             })
 
             player.connect()
-                .then((r) => {console.log(r)})
+                .then((r) => {
+                    console.log(r)
+                })
                 .catch(err => console.log(err))
 
             window.onbeforeunload = () => {
                 player.disconnect()
             }
         }
+
     }, []);
+
+    // TODO: move code aboutArtist here into function
 
 
     return (
         <>
+            {window.localStorage.getItem('prod') === 'true' && console.clear()}
             {!isMobileVersion()
                 ? (
                     <>
                         <UpdateDesktop songImg={songImg}
                                        songName={songName}
                                        songArtist={songArtist}
-                                       title={songName + ' -  ' + songArtist}/>
-                        <SetBackgroundColor link={songImg} />
+                                       title={songName + ' -  ' + songArtist}
+                        />
+                        <SetBackgroundColor link={songImg}/>
                     </>
                 )
                 : (
                     <>
                         <UpdateMobile songImg={songImg}
                                       songName={songName}
-                                      songArtist={songArtist}/>
-                        <SetBackgroundColor link={songImg} />
+                                      songArtist={songArtist}
+                        />
+                        <SetBackgroundColor link={songImg}/>
                     </>
                 )}
 

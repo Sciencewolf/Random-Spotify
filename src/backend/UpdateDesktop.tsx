@@ -1,6 +1,4 @@
-// import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
-// import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import {Props, SongProps} from "./Props.ts";
 import Footer from "../frontend/Footer.tsx";
