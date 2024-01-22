@@ -173,6 +173,7 @@ function useLoadSpotifyWebPlayback() {
                         <UpdateMobile songImg={songImg}
                                       songName={songName}
                                       songArtist={songArtist}
+                                      playlistName={playlistName}
                         />
                         <SetBackgroundColor link={songImg}/>
                     </>
