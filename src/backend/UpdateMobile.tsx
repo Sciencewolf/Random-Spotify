@@ -1,20 +1,19 @@
-// import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
-// import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import Footer from "../frontend/Footer.tsx";
-import {Props, SongProps} from "./Props.ts";
+import {PlaylistProps, Props, SongProps} from "./Props.ts";
+import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 
 function updateMobile({
-                          // playlistName,
+                          playlistName,
                           songImg,
                           songName, songArtist,
                           // artistImg, followersArtist,
                           token
-                      }: SongProps & Props) {
+                      }: SongProps & PlaylistProps & Props) {
 
     return (
         <>
-            {/*<ShowPlaylistOnMobile playlistName={playlistName}/>*/}
+            <ShowPlaylistOnMobile playlistName={playlistName}/>
             <UpdateSkeleton songImg={songImg}
                             songName={songName}
                             songArtist={songArtist}

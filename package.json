@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@vercel/analytics": "^1.1.2",
-    "@vercel/speed-insights": "^1.0.5",
     "color-thief-react": "^2.1.0",
     "colorthief": "^2.4.0",
     "fast-average-color": "^9.4.0",

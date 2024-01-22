@@ -1,13 +1,14 @@
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
-import {Props, SongProps} from "./Props.ts";
+import {PlaylistProps, Props, SongProps} from "./Props.ts";
 import Footer from "../frontend/Footer.tsx";
+import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
 
 function updateDesktop({
                            // artistName, artistImg, followersArtist,
                        songImg, songName, songArtist,
-                       // playlistImg, playlistName, followersPlaylist,
-                       title}: SongProps & Props) {
+                       playlistName,
+                       title}: SongProps & PlaylistProps & Props) {
     return (
         <>
             {/*<AboutTheArtist artistName={artistName}*/}
@@ -18,10 +19,9 @@ function updateDesktop({
                             songName={songName}
                             songArtist={songArtist}
             />
-            {/*<ShowPlaylistOfSong playlistImg={playlistImg}*/}
-            {/*                    playlistName={playlistName}*/}
-            {/*                    followersPlaylist={followersPlaylist}*/}
-            {/*/>*/}
+            {playlistName != 'undefined'
+                ? <ShowPlaylistOfSong playlistName={playlistName} />
+                : <></>}
             <UpdateTitle title={title} />
             <Footer isChangeFooterClassName={true}/>
         </>

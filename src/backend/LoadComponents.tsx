@@ -3,7 +3,6 @@ import '../style/Skeleton.css'
 // import getPlaylistIDs from "./PlaylistIDs.ts";
 import Error from "../frontend/Error.tsx";
 import UpdateLoginButton from "../frontend/UpdateLoginButton.tsx";
-import {SpeedInsights} from "@vercel/speed-insights/react";
 
 function LoadComponents(): JSX.Element {
     const [userIcon, setUserIcon] = useState("")
@@ -132,7 +131,6 @@ function LoadComponents(): JSX.Element {
                 <>
                     <UpdateLoginButton userIcon={userIcon}
                                        userName={userName} />
-                    <SpeedInsights />
                 </>
             )}
         </>

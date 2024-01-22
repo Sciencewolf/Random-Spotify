@@ -5,13 +5,15 @@ import {isMobileVersion} from "./isMobileVersion";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
-import {SpeedInsights} from "@vercel/speed-insights/react";
 
 // TODO: implement all functions inside this component
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
     const [songArtist, setSongArtist] = useState('')
     const [songName, setSongName] = useState('')
+
+    // const [playlistImg, setPlaylistImg] = useState('')
+    const [playlistName, setPlaylistName] = useState('')
 
     const [log, setLog] = useState('')
 
@@ -70,9 +72,20 @@ function useLoadSpotifyWebPlayback() {
                                         setSongArtist((oldState) => oldState + ', ' + str)
                                     }
                                 }
+                                // @ts-ignore
+                                setPlaylistName(String(state['context']['metadata']['context_description']))
+
                                 console.log(log);
                                 if(window.localStorage.getItem('prod') === 'true'){
                                     console.clear()
+                                }
+
+                                if(!state.paused){
+                                    playButtonImage.src = pauseIcon
+                                    playButtonImage.style.width = '32px'
+                                    playButtonImage.style.height = '32px'
+                                }else {
+                                    playButtonImage.src = playIcon
                                 }
                             }
                         }
@@ -90,14 +103,6 @@ function useLoadSpotifyWebPlayback() {
 
             play_btn.addEventListener('click', () => {
                 player.togglePlay()
-                if(playButtonImage.src === pauseIcon) {
-                    playButtonImage.src = playIcon
-                }else {
-                    playButtonImage.src = pauseIcon
-                    playButtonImage.style.width = '32px'
-                    playButtonImage.style.height = '32px'
-                }
-
             })
 
             next_btn.addEventListener('click', () => {
@@ -114,11 +119,38 @@ function useLoadSpotifyWebPlayback() {
                 window.localStorage.setItem('load', 'true')
                 player.disconnect()
             }
+
+            // play song on space press
+            window.document.addEventListener('keypress', e => {
+                if(e.code === 'Space') {
+                    player.togglePlay()
+                }
+            })
+
+            // left arrow key do play previous song
+            window.document.addEventListener('keydown', e => {
+                if(e.key === 'ArrowLeft'){
+                    player.previousTrack()
+                }
+            })
+
+            // right arrow key to play next song
+            window.document.addEventListener('keydown', e => {
+                if(e.key === 'ArrowRight'){
+                    player.nextTrack()
+                }
+            })
+
+            window.onunload = () => {
+                player.disconnect()
+            }
         }
 
     }, []);
 
     // TODO: move code aboutArtist here into function
+
+
 
 
     return (
@@ -131,9 +163,9 @@ function useLoadSpotifyWebPlayback() {
                                        songName={songName}
                                        songArtist={songArtist}
                                        title={songName + ' • ' + songArtist}
+                                       playlistName={playlistName}
                         />
                         <SetBackgroundColor link={songImg}/>
-                        <SpeedInsights />
                     </>
                 )
                 : (
@@ -143,7 +175,6 @@ function useLoadSpotifyWebPlayback() {
                                       songArtist={songArtist}
                         />
                         <SetBackgroundColor link={songImg}/>
-                        <SpeedInsights />
                     </>
                 )}
 
