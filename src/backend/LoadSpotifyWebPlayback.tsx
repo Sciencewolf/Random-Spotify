@@ -22,6 +22,8 @@ function useLoadSpotifyWebPlayback() {
 
     let base: string | null | Spotify.Track = ''
 
+    let artists: string = ''
+
     let touchstartX = 0
     let touchendX = 0
 
@@ -71,12 +73,17 @@ function useLoadSpotifyWebPlayback() {
                             setSongImg(String(base.album.images[0].url));
 
                             if(base.artists.length === 1) {
+                                artists = ''
                                 setSongArtist(String(base.artists[0].name));
+                                artists += base.artists[0].name
                             }else {
+                                artists = ''
                                 setSongArtist(base.artists[0].name)
+                                artists += base.artists[0].name;
                                 for(let index = 1;index < base.artists.length;index++){
                                     const str = base.artists[index].name;
                                     setSongArtist((oldState) => oldState + ', ' + str)
+                                    artists += ', ' + str
                                 }
                             }
 
@@ -99,6 +106,29 @@ function useLoadSpotifyWebPlayback() {
                                 playButtonImage.style.height = '32px'
                             }else {
                                 playButtonImage.src = playIcon
+                            }
+
+                            if("mediaSession" in window.navigator){
+                                window.navigator.mediaSession.metadata = new MediaMetadata({
+                                    title: base.name,
+                                    artist: artists,
+                                    artwork: [
+                                        { src: String(base.album.images[0].url), sizes: '96x96', type: 'image/png' },
+                                        { src: String(base.album.images[0].url), sizes: '128x128', type: 'image/png' },
+                                        { src: String(base.album.images[0].url), sizes: '192x192', type: 'image/png' },
+                                        { src: String(base.album.images[0].url), sizes: '256x256', type: 'image/png' },
+                                        { src: String(base.album.images[0].url), sizes: '384x384', type: 'image/png' },
+                                        { src: String(base.album.images[0].url), sizes: '512x512', type: 'image/png' }
+                                    ]
+                                })
+
+                                window.navigator.mediaSession.setActionHandler('nexttrack', () => {
+                                    player.nextTrack()
+                                })
+
+                                window.navigator.mediaSession.setActionHandler('previoustrack', () => {
+                                    player.previousTrack()
+                                })
                             }
                         }
                     }
