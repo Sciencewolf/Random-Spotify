@@ -21,10 +21,12 @@ function updateDesktop({
                             songName={songName}
                             songArtist={songArtist}
             />
-            <ShowPlaylistOfSong playlistName={playlistName}
-                                playlistImg={playlistImg}
-                                followersPlaylist={followersPlaylist}
-            />
+            {playlistName != 'undefined'
+                ? <ShowPlaylistOfSong playlistName={playlistName}
+                                      playlistImg={playlistImg}
+                                      followersPlaylist={followersPlaylist}
+                />
+                : <></>}
             <UpdateTitle title={title} />
             <Footer isChangeFooterClassName={true}/>
             <SetBackgroundColor link={link == undefined ? "" : link} />

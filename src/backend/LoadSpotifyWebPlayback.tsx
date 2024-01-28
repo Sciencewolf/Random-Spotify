@@ -109,6 +109,8 @@ function useLoadSpotifyWebPlayback() {
             const play_btn = document.getElementById('play-button') as HTMLButtonElement
             const next_btn = document.getElementById('next-button')!
             const song_img = document.getElementById('song-img')!
+            // prevent scroll when image is touched
+            song_img.style.touchAction = 'none'
 
             previous_btn.addEventListener('click', () => {
                 player.previousTrack()
