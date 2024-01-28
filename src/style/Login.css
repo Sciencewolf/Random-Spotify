@@ -35,7 +35,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
     color: white;
     background-color: limegreen;
     appearance: none;
@@ -44,6 +43,7 @@
     font-size: 20px;
     padding: 5px;
     border: 0;
+    border-radius: 10px;
 }
 
 @media screen and (max-width: 768px) {
@@ -58,6 +58,7 @@
 @media (hover: hover) {
     #logout:hover {
         text-decoration: none;
+        color: black;
     }
 
     .login:hover {
