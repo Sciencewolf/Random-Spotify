@@ -3,9 +3,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 400px;
+    max-width: 400px;
+    width: 350px;
     height: auto;
-    background-color: white;
+    background-color: #f9f9f9;
     color: black;
     border-radius: 10px;
     user-select: none;
@@ -32,6 +33,7 @@
     transition: all .3s ease-out;
     transform: scale(1);
     background-color: white;
+    outline: none;
 }
 
 #previous-button, #next-button {
@@ -46,6 +48,7 @@
     height: 36px;
     transition: all .3s ease-out;
     transform: scale(1);
+    outline: none;
 }
 
 #song-img {
