@@ -38,7 +38,7 @@ function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
             >
                 {userName}
             </h3>
-            <i className="fa fa-caret-down"
+            <i className={isClicked ? "fa fa-caret-up" : "fa fa-caret-down"}
                aria-hidden="true"
                onClick={handleMouseClick}
             >
