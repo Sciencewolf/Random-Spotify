@@ -5,6 +5,7 @@ export type Props = {
     update?: boolean
     updateUserProfile?: boolean
     token?: string | undefined | null
+    link?: string
 }
 
 export type SongProps =  {
@@ -26,7 +27,6 @@ export type ArtistProps = {
 
 export type PlaylistProps = {
     playlistImg?: string
-    playlistName?: string
+    playlistName: string
     followersPlaylist?: string
-    songUri?: string[]
 }
