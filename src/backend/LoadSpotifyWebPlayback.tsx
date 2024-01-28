@@ -108,6 +108,7 @@ function useLoadSpotifyWebPlayback() {
             const previous_btn = document.getElementById('previous-button') as HTMLButtonElement
             const play_btn = document.getElementById('play-button') as HTMLButtonElement
             const next_btn = document.getElementById('next-button')!
+            const song_img = document.getElementById('song-img')!
 
             previous_btn.addEventListener('click', () => {
                 player.previousTrack()
@@ -149,11 +150,12 @@ function useLoadSpotifyWebPlayback() {
                 }
             })
 
-            window.document.addEventListener('touchstart', e => {
+            // swiping to play next/prev song on mobile
+            song_img.addEventListener('touchstart', e => {
                 touchstartX = e.changedTouches[0].screenX
             })
 
-            window.document.addEventListener('touchend', e => {
+            song_img.addEventListener('touchend', e => {
                 touchendX = e.changedTouches[0].screenX
                 checkDirection()
             })
