@@ -3,7 +3,7 @@ import '../style/User.css'
 import {UserProps} from "../backend/Props.ts";
 
 function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
-    const [isHovered, setIsHovered] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
 
     const handleLogout = () => {
         window.localStorage.removeItem('token');
@@ -11,12 +11,9 @@ function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
         window.location.href = import.meta.env.VITE_PRODUCTION;
     };
 
-    const handleMouseOver = () => {
-        setIsHovered(true);
-    };
-
-    const handleMouseOut = () => {
-        setIsHovered(false);
+    const handleMouseClick = () => {
+        if(isClicked) setIsClicked(false)
+        else setIsClicked(true);
     };
 
     return (
@@ -31,30 +28,36 @@ function UpdateLoginButton({ userIcon, userName }: UserProps): JSX.Element {
                 alignItems: 'center',
                 transition: 'none'
             }}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
         >
-            {isHovered ? (
-                <button type="button"
-                        onClick={handleLogout}
-                        id="logout"
-                        className="logout"
+            <img src={userIcon}
+                 alt="user-icon"
+                 id="user-icon"
+            />
+            <h3 className="user-name"
+                id="user-name"
+            >
+                {userName}
+            </h3>
+            <i className="fa fa-caret-down"
+               aria-hidden="true"
+               onClick={handleMouseClick}
+            >
+            </i>
+            {isClicked &&
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    id="logout"
+                    className="logout"
+                    style={{
+                        position: 'absolute',
+                        bottom: '-50px',
+                        backgroundColor: 'grey'
+                    }}
                 >
                     Logout
                 </button>
-            ) : (
-                <>
-                    <img src={userIcon}
-                         alt="user-icon"
-                         id="user-icon"
-                    />
-                    <h3 className="user-name"
-                        id="user-name"
-                    >
-                        {userName}
-                    </h3>
-                </>
-            )}
+            }
         </div>
     );
 }

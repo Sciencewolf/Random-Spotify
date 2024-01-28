@@ -4,20 +4,26 @@ import UpdateDesktop from "./UpdateDesktop.tsx";
 import {isMobileVersion} from "./isMobileVersion";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
-import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 
-// TODO: implement all functions inside this component
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
     const [songArtist, setSongArtist] = useState('')
     const [songName, setSongName] = useState('')
 
-    // const [playlistImg, setPlaylistImg] = useState('')
+    const [artistName, setArtistName] = useState('')
+    const [artistImg, setArtistImg] = useState('')
+    const [artistFollowers, setArtistFollowers] = useState('')
+
+    const [playlistImg, setPlaylistImg] = useState('')
     const [playlistName, setPlaylistName] = useState('')
+    const [playlistFollowers, setPlaylistFollowers] = useState('')
 
     const [log, setLog] = useState('')
 
     let base: string | null | Spotify.Track = ''
+
+    let touchstartX = 0
+    let touchendX = 0
 
     const pauseIcon: string = 'https://assets.dryicons.com/uploads/icon/svg/9893/ef127c46-38b9-4cf5-bd27-4474e15b105c.svg'
     const playIcon: string = 'https://img.icons8.com/windows/32/play--v1.png'
@@ -55,38 +61,44 @@ function useLoadSpotifyWebPlayback() {
                         if (!state) {
                             setLog(oldState => oldState + 'error');
                         } else {
-                            if (window.localStorage.getItem('load') === 'true') {
+                            if (window.localStorage.getItem('load') === 'true' && !state.loading) {
                                 play_btn.click();
                                 window.localStorage.setItem('load', 'false')
-                            } else {
-                                console.log(state, 'state');
-                                base = state.track_window.current_track;
-                                setSongName(base.name);
-                                setSongImg(String(base.album.images[0].url));
-                                if(base.artists.length === 1) {
-                                    setSongArtist(String(base.artists[0].name));
-                                }else {
-                                    setSongArtist(base.artists[0].name)
-                                    for(let index = 1;index < base.artists.length;index++){
-                                        const str = base.artists[index].name;
-                                        setSongArtist((oldState) => oldState + ', ' + str)
-                                    }
-                                }
-                                // @ts-ignore
-                                setPlaylistName(String(state['context']['metadata']['context_description']))
+                            }
+                            console.log(state, 'state');
+                            base = state.track_window.current_track;
+                            setSongName(base.name);
+                            setSongImg(String(base.album.images[0].url));
 
-                                console.log(log);
-                                if(window.localStorage.getItem('prod') === 'true'){
-                                    console.clear()
+                            if(base.artists.length === 1) {
+                                setSongArtist(String(base.artists[0].name));
+                            }else {
+                                setSongArtist(base.artists[0].name)
+                                for(let index = 1;index < base.artists.length;index++){
+                                    const str = base.artists[index].name;
+                                    setSongArtist((oldState) => oldState + ', ' + str)
                                 }
+                            }
 
-                                if(!state.paused){
-                                    playButtonImage.src = pauseIcon
-                                    playButtonImage.style.width = '32px'
-                                    playButtonImage.style.height = '32px'
-                                }else {
-                                    playButtonImage.src = playIcon
-                                }
+                            // @ts-ignore
+                            setPlaylistName(String(state['context']['metadata']['context_description']))
+                            console.log(log);
+
+                            // loading functions
+                            // @ts-ignore
+                            playlist(String(state['context']['uri'].split(':').pop()))
+                            artist(String(base.artists[0].uri.split(':').pop()))
+
+                            if(window.localStorage.getItem('prod') === 'true'){
+                                console.clear()
+                            }
+
+                            if(!state.paused){
+                                playButtonImage.src = pauseIcon
+                                playButtonImage.style.width = '32px'
+                                playButtonImage.style.height = '32px'
+                            }else {
+                                playButtonImage.src = playIcon
                             }
                         }
                     }
@@ -109,11 +121,7 @@ function useLoadSpotifyWebPlayback() {
                 player.nextTrack()
             })
 
-            player.connect()
-                .then((r) => {
-                    console.log(r)
-                })
-                .catch(err => console.log(err))
+            await player.connect()
 
             window.onbeforeunload = () => {
                 window.localStorage.setItem('load', 'true')
@@ -141,17 +149,96 @@ function useLoadSpotifyWebPlayback() {
                 }
             })
 
+            window.document.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX
+            })
+
+            window.document.addEventListener('touchend', e => {
+                touchendX = e.changedTouches[0].screenX
+                checkDirection()
+            })
+
             window.onunload = () => {
                 player.disconnect()
+            }
+
+            function checkDirection() {
+                if (touchendX < touchstartX) player.nextTrack()
+                if (touchendX > touchstartX) player.previousTrack()
             }
         }
 
     }, []);
 
-    // TODO: move code aboutArtist here into function
+    async function playlist(id: string) {
+        try {
+            const response = await fetch(`https://api.spotify.com/v1/playlists/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
+                }
+            })
 
+            if (!response.ok) {
+                return;
+            }
 
+            const getJson = await response.json();
+            setPlaylistImg(getJson.images[0].url)
 
+            setPlaylistFollowers(formatFollowers(+getJson.followers.total) + ' followers')
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async function artist(id: string) {
+        try {
+            const response = await fetch(`https://api.spotify.com/v1/artists/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem("token")}`
+                }
+            })
+
+            if(!response.ok){
+                return
+            }
+
+            const data = await response.json()
+
+            setArtistName(data.name)
+            setArtistImg(data.images[1].url)
+
+            setArtistFollowers(formatFollowers(+data.followers.total))
+        }catch (err){
+            console.log(err)
+        }
+    }
+
+    function formatFollowers(total: number) {
+        let followers: string = ''
+
+        if(total < 1000){
+            followers = total.toString()
+        }
+        else if(total < 100_000) {
+            followers = String((total / 1_000)
+                .toPrecision(2))
+                .replace('.', ',') + 'K'
+        }
+        else if(total < 1_000_000) {
+            followers = String((total / 1_000)
+                .toPrecision(3)
+                .replace('.', ',')) + 'K'
+        }
+        else {
+            followers = String((total / 1_000_000)
+                .toPrecision(3))
+                .replace('.', ',') + 'M'
+        }
+
+        return followers
+    }
 
     return (
         <>
@@ -162,10 +249,15 @@ function useLoadSpotifyWebPlayback() {
                         <UpdateDesktop songImg={songImg}
                                        songName={songName}
                                        songArtist={songArtist}
-                                       title={songName + ' • ' + songArtist}
+                                       artistName={artistName}
+                                       artistImg={artistImg}
+                                       followersArtist={artistFollowers}
                                        playlistName={playlistName}
+                                       playlistImg={playlistImg}
+                                       followersPlaylist={playlistFollowers}
+                                       link={songImg}
+                                       title={songName !== '' ? songName + ' • ' + songArtist : "Random Spotify"}
                         />
-                        <SetBackgroundColor link={songImg}/>
                     </>
                 )
                 : (
@@ -173,9 +265,12 @@ function useLoadSpotifyWebPlayback() {
                         <UpdateMobile songImg={songImg}
                                       songName={songName}
                                       songArtist={songArtist}
+                                      artistName={artistName}
+                                      artistImg={artistImg}
+                                      followersArtist={artistFollowers}
                                       playlistName={playlistName}
+                                      link={songImg}
                         />
-                        <SetBackgroundColor link={songImg}/>
                     </>
                 )}
 

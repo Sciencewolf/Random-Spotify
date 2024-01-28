@@ -21,7 +21,7 @@ function showPlaylistOfSong({playlistImg, playlistName, followersPlaylist}: Play
                        userSelect: "none"
                    }}
                 >
-                    {followersPlaylist} followers
+                    {followersPlaylist}
                 </p>
             </div>
         </>
