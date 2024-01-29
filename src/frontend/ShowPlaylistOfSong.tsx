@@ -15,14 +15,17 @@ function showPlaylistOfSong({playlistImg, playlistName, followersPlaylist}: Play
                 >
                     {playlistName}
                 </h2>
-                <p className={"followers-p"}
-                   id={"followers-p"}
-                   style={{
-                       userSelect: "none"
-                   }}
-                >
+                {followersPlaylist != '0 followers'
+                    ?
+                    <p className={"followers-p"}
+                       id={"followers-p"}
+                       style={{
+                           userSelect: "none"
+                       }}
+                    >
                     {followersPlaylist}
                 </p>
+                    : <></>}
             </div>
         </>
     )

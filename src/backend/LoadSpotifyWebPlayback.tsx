@@ -93,7 +93,12 @@ function useLoadSpotifyWebPlayback() {
 
                             // loading functions
                             // @ts-ignore
-                            playlist(String(state['context']['uri'].split(':').pop()))
+                            if(state['context']['uri'].split(':')[1] != 'artist'){
+                                // @ts-ignore
+                                playlist(String(state['context']['uri'].split(':').pop()))
+                            }else {
+                                setPlaylistName('undefined')
+                            }
                             artist(String(base.artists[0].uri.split(':').pop()))
 
                             if(window.localStorage.getItem('prod') === 'true'){
@@ -213,6 +218,7 @@ function useLoadSpotifyWebPlayback() {
             })
 
             if (!response.ok) {
+                setPlaylistName('undefined')
                 return;
             }
 

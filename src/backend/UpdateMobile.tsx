@@ -1,9 +1,9 @@
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import Footer from "../frontend/Footer.tsx";
 import {ArtistProps, PlaylistProps, Props, SongProps} from "./Props.ts";
-import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
+import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 
 function updateMobile({
                           playlistName,
@@ -14,7 +14,10 @@ function updateMobile({
 
     return (
         <>
-            <ShowPlaylistOnMobile playlistName={playlistName}/>
+            {playlistName != 'undefined'
+                ? <ShowPlaylistOnMobile playlistName={playlistName}
+                />
+                : <></>}
             <UpdateSkeleton songImg={songImg}
                             songName={songName}
                             songArtist={songArtist}
