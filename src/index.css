@@ -25,6 +25,20 @@ body {
   min-height: 100vh;
 }
 
+.div-volume {
+  position: absolute;
+  bottom: 3em;
+  right: 2em;
+}
+
+.div-volume input:hover {
+  cursor: pointer;
+}
+
+.div-volume img:hover {
+  cursor: pointer;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

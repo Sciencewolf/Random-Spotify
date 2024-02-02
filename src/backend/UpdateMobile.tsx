@@ -8,7 +8,7 @@ import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
 function updateMobile({
                           playlistName,
                           songImg, songName, songArtist,
-                          artistImg, followersArtist,
+                          artistName, artistImg, followersArtist,
                           link
                       }: SongProps & ArtistProps & PlaylistProps & Props) {
 
@@ -22,7 +22,7 @@ function updateMobile({
                             songName={songName}
                             songArtist={songArtist}
             />
-            <AboutTheArtist artistName={songArtist}
+            <AboutTheArtist artistName={artistName}
                             artistImg={artistImg}
                             followersArtist={followersArtist + " followers"}
             />

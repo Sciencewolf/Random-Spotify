@@ -30,6 +30,9 @@ function useLoadSpotifyWebPlayback() {
     const pauseIcon: string = 'https://assets.dryicons.com/uploads/icon/svg/9893/ef127c46-38b9-4cf5-bd27-4474e15b105c.svg'
     const playIcon: string = 'https://img.icons8.com/windows/32/play--v1.png'
 
+    const volumePlayIcon: string = 'https://img.icons8.com/ios-glyphs/30/medium-volume.png'
+    const volumePauseIcon: string = 'https://img.icons8.com/ios-glyphs/30/FFFFFF/no-audio--v1.png'
+
     useEffect(() => {
         const browser = new UAParser();
         const playButtonImage: HTMLImageElement =
@@ -63,10 +66,6 @@ function useLoadSpotifyWebPlayback() {
                         if (!state) {
                             setLog(oldState => oldState + 'error');
                         } else {
-                            if (window.localStorage.getItem('load') === 'true' && !state.loading) {
-                                play_btn.click();
-                                window.localStorage.setItem('load', 'false')
-                            }
                             console.log(state, 'state');
                             base = state.track_window.current_track;
                             setSongName(base.name);
@@ -113,28 +112,7 @@ function useLoadSpotifyWebPlayback() {
                                 playButtonImage.src = playIcon
                             }
 
-                            if("mediaSession" in window.navigator){
-                                window.navigator.mediaSession.metadata = new MediaMetadata({
-                                    title: base.name,
-                                    artist: artists,
-                                    artwork: [
-                                        { src: String(base.album.images[0].url), sizes: '96x96', type: 'image/png' },
-                                        { src: String(base.album.images[0].url), sizes: '128x128', type: 'image/png' },
-                                        { src: String(base.album.images[0].url), sizes: '192x192', type: 'image/png' },
-                                        { src: String(base.album.images[0].url), sizes: '256x256', type: 'image/png' },
-                                        { src: String(base.album.images[0].url), sizes: '384x384', type: 'image/png' },
-                                        { src: String(base.album.images[0].url), sizes: '512x512', type: 'image/png' }
-                                    ]
-                                })
-
-                                window.navigator.mediaSession.setActionHandler('nexttrack', () => {
-                                    player.nextTrack()
-                                })
-
-                                window.navigator.mediaSession.setActionHandler('previoustrack', () => {
-                                    player.previousTrack()
-                                })
-                            }
+                            mediaSession(player, base)
                         }
                     }
                 )
@@ -166,6 +144,10 @@ function useLoadSpotifyWebPlayback() {
                 player.disconnect()
             }
 
+            window.onunload = () => {
+                player.disconnect()
+            }
+
             // play song on space press
             window.document.addEventListener('keypress', e => {
                 if(e.code === 'Space') {
@@ -194,20 +176,108 @@ function useLoadSpotifyWebPlayback() {
 
             song_img.addEventListener('touchend', e => {
                 touchendX = e.changedTouches[0].screenX
-                checkDirection()
+                checkDirection(player)
             })
 
-            window.onunload = () => {
-                player.disconnect()
+            if(!isMobileVersion()){
+                await volumeComponent(player)
             }
 
-            function checkDirection() {
-                if (touchendX < touchstartX) player.nextTrack()
-                if (touchendX > touchstartX) player.previousTrack()
+            if(window.localStorage.getItem('load') === 'true'){
+                await player.togglePlay()
+                window.localStorage.setItem('load', 'false')
             }
         }
 
     }, []);
+
+    function checkDirection(player: Spotify.Player) {
+        if (touchendX < touchstartX) player.nextTrack()
+        if (touchendX > touchstartX) player.previousTrack()
+    }
+
+    async function volumeComponent(player: Spotify.Player){
+        let previousValue: number = 0
+
+        const divVolume = document.createElement('div')
+        divVolume.id = 'div-volume'
+        divVolume.className = 'div-volume'
+        divVolume.style.display = 'flex'
+        divVolume.style.alignItems = 'center'
+        divVolume.style.justifyContent = 'center'
+
+        const imgVolumeIcon = document.createElement('img')
+        imgVolumeIcon.id = 'img-volume'
+        imgVolumeIcon.src = 'https://img.icons8.com/ios-glyphs/30/medium-volume.png'
+        imgVolumeIcon.alt = 'volume-icon play'
+
+        const volumeInput = document.createElement('input')
+        volumeInput.className = 'volume-input'
+        volumeInput.id = 'volume-input'
+        volumeInput.type = 'range'
+        volumeInput.tabIndex = -1
+        volumeInput.value = String(await player.getVolume() * 100)
+        volumeInput.max = '100'
+        volumeInput.min = '0'
+        volumeInput.step = '1'
+
+        imgVolumeIcon.addEventListener('click', () => {
+            if(imgVolumeIcon.alt.includes('play')){
+                imgVolumeIcon.src = volumePauseIcon // white
+                imgVolumeIcon.alt = 'volume-icon pause'
+                previousValue = +volumeInput.value / 100
+                player.setVolume(0)
+                volumeInput.value = '0'
+            }else if(imgVolumeIcon.alt.includes('pause')){
+                imgVolumeIcon.src = volumePlayIcon
+                imgVolumeIcon.alt = 'volume-icon play'
+                player.setVolume(previousValue)
+                volumeInput.value = (previousValue * 100).toString()
+            }
+        })
+
+        volumeInput.addEventListener('input', () => {
+            if(imgVolumeIcon.alt.includes('pause')){
+                imgVolumeIcon.src = volumePlayIcon
+                imgVolumeIcon.alt = 'volume-icon play'
+            }
+            if(+volumeInput.value === 0){
+                imgVolumeIcon.src = volumePauseIcon
+                imgVolumeIcon.alt = 'volume-icon pause'
+            }
+            player.setVolume(+volumeInput.value / 100)
+            volumeInput.blur()
+        })
+
+        divVolume.appendChild(imgVolumeIcon)
+        divVolume.appendChild(volumeInput)
+        document.body.appendChild(divVolume)
+    }
+
+    function mediaSession(player: Spotify.Player, base: Spotify.Track){
+        if("mediaSession" in window.navigator){
+            window.navigator.mediaSession.metadata = new MediaMetadata({
+                title: base.name,
+                artist: artists,
+                artwork: [
+                    { src: String(base.album.images[0].url), sizes: '96x96', type: 'image/png' },
+                    { src: String(base.album.images[0].url), sizes: '128x128', type: 'image/png' },
+                    { src: String(base.album.images[0].url), sizes: '192x192', type: 'image/png' },
+                    { src: String(base.album.images[0].url), sizes: '256x256', type: 'image/png' },
+                    { src: String(base.album.images[0].url), sizes: '384x384', type: 'image/png' },
+                    { src: String(base.album.images[0].url), sizes: '512x512', type: 'image/png' }
+                ]
+            })
+
+            window.navigator.mediaSession.setActionHandler('nexttrack', () => {
+                player.nextTrack()
+            })
+
+            window.navigator.mediaSession.setActionHandler('previoustrack', () => {
+                player.previousTrack()
+            })
+        }
+    }
 
     async function playlist(id: string) {
         try {

@@ -15,14 +15,6 @@
     color: red !important;
 }
 
-#dev a{
-    color: firebrick;
-}
-
-a {
-    color: crimson;
-}
-
 a:visited {
     color: white;
 }

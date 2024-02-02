@@ -33,6 +33,7 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps): JSX.Eleme
                      id={"controllers"}>
                     <button className={"previous-button"}
                             id={"previous-button"}
+                            tabIndex={-1}
                     >
                         <img src={"https://img.icons8.com/windows/32/backward-button.png"}
                              alt={"previous-btn"}
@@ -42,6 +43,7 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps): JSX.Eleme
                     {/*TODO: handle play and pause events*/}
                     <button className={"play-button"}
                             id={"play-button"}
+                            tabIndex={-1}
                     >
                         <img width={"32"}
                              height={"32"}
@@ -53,6 +55,7 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps): JSX.Eleme
                     <button type={"button"}
                             id={"next-button"}
                             className={"next-button"}
+                            tabIndex={-1}
                     >
                         <img
                             src={"https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/24/external-next-multimedia-tanah-basah-basic-outline-tanah-basah.png"}
