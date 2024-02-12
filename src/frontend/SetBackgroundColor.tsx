@@ -13,9 +13,18 @@ function setBackgroundColor(props: {link: string}) {
     fac.getColorAsync(props.link)
         .then(color => {
             body.style.backgroundColor = color.rgb
-            footer.style.color = color.isDark ? '#fff' : '#000'
-            footer_a.style.color = color.isDark ? '#fff' : '#000'
-            img_volume_icon.src = color.isDark ? img_volume_icon_light : img_volume_icon_dark
+            if(color.isDark) {
+                footer.style.color = '#fff'
+                footer_a.style.color = '#fff'
+                img_volume_icon.src = img_volume_icon_light
+                img_volume_icon.alt = 'volume-icon unmute light'
+            }
+            else if(color.isLight){
+                footer.style.color = '#000'
+                footer_a.style.color = '#000'
+                img_volume_icon.src = img_volume_icon_dark
+                img_volume_icon.alt = 'volume-img unmute dark'
+            }
             theme_color.content = color.rgb
         })
         .catch(err => console.log(err))

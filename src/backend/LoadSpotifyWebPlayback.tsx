@@ -30,8 +30,10 @@ function useLoadSpotifyWebPlayback() {
     const pauseIcon: string = 'https://assets.dryicons.com/uploads/icon/svg/9893/ef127c46-38b9-4cf5-bd27-4474e15b105c.svg'
     const playIcon: string = 'https://img.icons8.com/windows/32/play--v1.png'
 
-    const volumePlayIcon: string = 'https://img.icons8.com/ios-glyphs/30/medium-volume.png'
-    const volumePauseIcon: string = 'https://img.icons8.com/ios-glyphs/30/FFFFFF/no-audio--v1.png'
+    const volumeMuteIconDark: string = 'https://img.icons8.com/ios-glyphs/30/FFFFFF/no-audio--v1.png'
+    const volumeMuteIconLight: string = 'https://img.icons8.com/ios-glyphs/30/no-audio--v1.png'
+    const volumeUnmuteIconLight: string = 'https://img.icons8.com/ios-glyphs/30/medium-volume.png'
+    const volumeUnmuteIconDark: string = 'https://img.icons8.com/ios-glyphs/30/FFFFFF/medium-volume.png'
 
     useEffect(() => {
         const browser = new UAParser();
@@ -57,12 +59,13 @@ function useLoadSpotifyWebPlayback() {
                 setLog((oldState) => oldState + device_id)
             })
 
-            player.addListener('player_state_changed', (state) => {
+            player.addListener('player_state_changed', async(state) => {
                 if (!state) {
                     return;
                 }
 
-                player.getCurrentState().then(state => {
+                //  try using web api not this
+                player.getCurrentState().then(async state => {
                         if (!state) {
                             setLog(oldState => oldState + 'error');
                         } else {
@@ -71,15 +74,15 @@ function useLoadSpotifyWebPlayback() {
                             setSongName(base.name);
                             setSongImg(String(base.album.images[0].url));
 
-                            if(base.artists.length === 1) {
+                            if (base.artists.length === 1) {
                                 artists = ''
                                 setSongArtist(String(base.artists[0].name));
                                 artists += base.artists[0].name
-                            }else {
+                            } else {
                                 artists = ''
                                 setSongArtist(base.artists[0].name)
                                 artists += base.artists[0].name;
-                                for(let index = 1;index < base.artists.length;index++){
+                                for (let index = 1; index < base.artists.length; index++) {
                                     const str = base.artists[index].name;
                                     setSongArtist((oldState) => oldState + ', ' + str)
                                     artists += ', ' + str
@@ -92,23 +95,23 @@ function useLoadSpotifyWebPlayback() {
 
                             // loading functions
                             // @ts-ignore
-                            if(state['context']['uri'].split(':')[1] != 'artist'){
+                            if (state['context']['uri'].split(':')[1] != 'artist') {
                                 // @ts-ignore
-                                playlist(String(state['context']['uri'].split(':').pop()))
-                            }else {
+                                await playlist(String(state['context']['uri'].split(':').pop()))
+                            } else {
                                 setPlaylistName('undefined')
                             }
-                            artist(String(base.artists[0].uri.split(':').pop()))
+                            await artist(String(base.artists[0].uri.split(':').pop()))
 
-                            if(window.localStorage.getItem('prod') === 'true'){
+                            if (window.localStorage.getItem('prod') === 'true') {
                                 console.clear()
                             }
 
-                            if(!state.paused){
+                            if (!state.paused) {
                                 playButtonImage.src = pauseIcon
                                 playButtonImage.style.width = '32px'
                                 playButtonImage.style.height = '32px'
-                            }else {
+                            } else {
                                 playButtonImage.src = playIcon
                             }
 
@@ -139,14 +142,9 @@ function useLoadSpotifyWebPlayback() {
 
             await player.connect()
 
-            window.onbeforeunload = () => {
-                window.localStorage.setItem('load', 'true')
-                player.disconnect()
-            }
-
-            window.onunload = () => {
-                player.disconnect()
-            }
+            window.onbeforeunload = window.onunload = () => {
+                player.disconnect();
+            };
 
             // play song on space press
             window.document.addEventListener('keypress', e => {
@@ -189,6 +187,8 @@ function useLoadSpotifyWebPlayback() {
             }
         }
 
+        // await
+
     }, []);
 
     function checkDirection(player: Spotify.Player) {
@@ -196,6 +196,7 @@ function useLoadSpotifyWebPlayback() {
         if (touchendX > touchstartX) player.previousTrack()
     }
 
+    // TODO: implement changing volume icon based of bgColor
     async function volumeComponent(player: Spotify.Player){
         let previousValue: number = 0
 
@@ -209,7 +210,7 @@ function useLoadSpotifyWebPlayback() {
         const imgVolumeIcon = document.createElement('img')
         imgVolumeIcon.id = 'img-volume'
         imgVolumeIcon.src = 'https://img.icons8.com/ios-glyphs/30/medium-volume.png'
-        imgVolumeIcon.alt = 'volume-icon play'
+        imgVolumeIcon.alt = 'volume-icon unmute'
 
         const volumeInput = document.createElement('input')
         volumeInput.className = 'volume-input'
@@ -221,30 +222,59 @@ function useLoadSpotifyWebPlayback() {
         volumeInput.min = '0'
         volumeInput.step = '1'
 
+        // good
         imgVolumeIcon.addEventListener('click', () => {
-            if(imgVolumeIcon.alt.includes('play')){
-                imgVolumeIcon.src = volumePauseIcon // white
-                imgVolumeIcon.alt = 'volume-icon pause'
+            if(imgVolumeIcon.alt.includes('unmute')){
+                if(imgVolumeIcon.alt.includes('dark')){
+                    imgVolumeIcon.src = volumeMuteIconLight
+                    imgVolumeIcon.alt = 'volume-icon mute dark'
+                }
+                else if(imgVolumeIcon.alt.includes('light')){
+                    imgVolumeIcon.src = volumeMuteIconDark
+                    imgVolumeIcon.alt = 'volume-icon mute light'
+                }
+
                 previousValue = +volumeInput.value / 100
                 player.setVolume(0)
                 volumeInput.value = '0'
-            }else if(imgVolumeIcon.alt.includes('pause')){
-                imgVolumeIcon.src = volumePlayIcon
-                imgVolumeIcon.alt = 'volume-icon play'
+            }else if(imgVolumeIcon.alt.includes('mute')){
+                if(imgVolumeIcon.alt.includes('dark')){
+                    imgVolumeIcon.src = volumeUnmuteIconLight
+                    imgVolumeIcon.alt = 'volume-icon unmute dark'
+                }
+                else if(imgVolumeIcon.alt.includes('light')){
+                    imgVolumeIcon.src = volumeUnmuteIconDark
+                    imgVolumeIcon.alt = 'volume-icon unmute light'
+                }
+
                 player.setVolume(previousValue)
                 volumeInput.value = (previousValue * 100).toString()
             }
         })
 
         volumeInput.addEventListener('input', () => {
-            if(imgVolumeIcon.alt.includes('pause')){
-                imgVolumeIcon.src = volumePlayIcon
-                imgVolumeIcon.alt = 'volume-icon play'
-            }
-            if(+volumeInput.value === 0){
-                imgVolumeIcon.src = volumePauseIcon
-                imgVolumeIcon.alt = 'volume-icon pause'
-            }
+            // if(imgVolumeIcon.alt.includes('unmute')){
+            //     if(imgVolumeIcon.alt.includes('dark')){
+            //         imgVolumeIcon.src = volumeUnmuteIconLight
+            //         imgVolumeIcon.alt = 'volume-icon mute dark'
+            //     }
+            //     else if(imgVolumeIcon.alt.includes('light')){
+            //         imgVolumeIcon.src = volumeUnmuteIconDark
+            //         imgVolumeIcon.alt = 'volume-icon mute light'
+            //     }
+            // }
+            // if(+volumeInput.value === 0){
+            //     if(imgVolumeIcon.alt.includes('unmute')){
+            //         if(imgVolumeIcon.alt.includes('dark')){
+            //             imgVolumeIcon.src = volumeMuteIconLight
+            //             imgVolumeIcon.alt = 'volume-icon unmute dark'
+            //         }
+            //         else if(imgVolumeIcon.alt.includes('light')){
+            //             imgVolumeIcon.src = volumeMuteIconDark
+            //             imgVolumeIcon.alt = 'volume-icon unmute light'
+            //         }
+            //     }
+            // }
             player.setVolume(+volumeInput.value / 100)
             volumeInput.blur()
         })

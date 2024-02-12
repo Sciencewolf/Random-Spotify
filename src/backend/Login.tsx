@@ -33,7 +33,7 @@ function Login() {
                 <a href={`${auth_point}?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes}&response_type=${response_type}&show_dialog=true`}
                    className={"login-a"}
                 >
-                    Login with Spotify
+                    Log in with Spotify
                 </a>
             </div>
         </>
