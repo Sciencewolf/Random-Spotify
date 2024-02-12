@@ -2,7 +2,9 @@ async function play() {
     const maxRetries = 3; // Set a maximum number of retries
     let retryCount = 0;
 
-    const tracks: string[] = ["spotify:track:3vefdW0Zsk57Qn0qxXeVCI"];
+    // const items: string[] | undefined = await playlistSongs()
+
+    // const tracks: string[] = ["spotify:track:3vefdW0Zsk57Qn0qxXeVCI"];
 
     while (retryCount < maxRetries) {
         try {
@@ -11,7 +13,7 @@ async function play() {
                     Authorization: `Bearer ${window.localStorage.getItem("token")}`
                 },
                 method: 'PUT',
-                body: JSON.stringify({"uris": tracks, 'position_ms': 0})
+                body: JSON.stringify({"context_uri": "spotify:playlist:37i9dQZF1DWWY64wDtewQt", 'position_ms': 0})
             });
 
             if (response.ok) {

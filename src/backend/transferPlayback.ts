@@ -1,3 +1,4 @@
+import play from "./play.ts";
 
 
 async function transferPlayback(device_id: string) {
@@ -15,7 +16,7 @@ async function transferPlayback(device_id: string) {
     }
 
     console.log('transfer ready')
-    // await play()
+    await play()
 }
 
 export default transferPlayback
