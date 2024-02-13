@@ -22,6 +22,8 @@ function useLoadSpotifyWebPlayback() {
 
     const [log, setLog] = useState('')
 
+    const [cache, setCache] = useState(new Map<string, [string, string, string]>)
+
     let base: string | null | Spotify.Track = ''
 
     let artists: string = ''
@@ -175,13 +177,21 @@ function useLoadSpotifyWebPlayback() {
     async function getPlaylistData(currentSong: string){
         const {items, mapOfSongs} = await playlistSongs(10)
 
-        const playlistId: string | undefined = mapOfSongs.get(currentSong)
+        const playlistId: string = mapOfSongs.get(currentSong) ?? ''
         const prevSongIndex: number = items.findIndex((item) => {
             return item === currentSong
         }) - 1
 
         if(mapOfSongs.get(items[prevSongIndex]) !== mapOfSongs.get(currentSong)){
-            await playlist(playlistId)
+            if(!cache.has(playlistId)) {
+                await playlist(playlistId)
+            }
+            else{
+                setPlaylistImg(cache.get(playlistId)![0])
+                setPlaylistName(cache.get(playlistId)![1])
+                setPlaylistFollowers(cache.get(playlistId)![2])
+                console.log(cache.get(playlistId)![1], 'name cache')
+            }
         }
     }
 
@@ -323,6 +333,8 @@ function useLoadSpotifyWebPlayback() {
             setPlaylistName(getJson.name)
             setPlaylistFollowers(formatFollowers(+getJson.followers.total) + ' followers')
 
+            setCache((prevState) => new Map(prevState.set(id, [getJson.images[0].url, getJson.name, formatFollowers(+getJson.followers.total) + ' followers'])))
+
         } catch (err) {
             console.log(err)
         }
@@ -374,6 +386,7 @@ function useLoadSpotifyWebPlayback() {
         }
 
         console.log(log)
+        console.log(cache, 'cache')
 
         return followers
     }

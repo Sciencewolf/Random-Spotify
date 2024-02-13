@@ -2,7 +2,7 @@ async function getPlaylistSongs(limit: number) {
     const items: string[] = []
     const mapOfSongs: Map<string, string> = new Map<string, string>();
 
-    const responsePhonk = await fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWWY64wDtewQt/tracks?${limit}=10`,
+    const responsePhonk = await fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWWY64wDtewQt/tracks?limit=${limit}`,
         {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem('token')}`
@@ -22,7 +22,7 @@ async function getPlaylistSongs(limit: number) {
         mapOfSongs.set(dataPhonk.items[i].track.uri, playlistIdPhonk)
     }
 
-    const responseUltraGaming = await fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWYN9NBqvY7Tx/tracks?${limit}=10`,
+    const responseUltraGaming = await fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWYN9NBqvY7Tx/tracks?limit=${limit}`,
         {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem('token')}`
