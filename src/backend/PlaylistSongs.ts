@@ -1,11 +1,8 @@
-async function getPlaylistSongs() {
-    /*
-    "37i9dQZF1DWWY64wDtewQt", // phonk
-        "37i9dQZF1DX0h2LvJ7ZJ15", // slowed and reverbed
-        "37i9dQZF1DWYN9NBqvY7Tx" // ultra gaming
-     */
+async function getPlaylistSongs(limit: number) {
+    const items: string[] = []
+    const mapOfSongs: Map<string, string> = new Map<string, string>();
 
-    const response = await fetch("https://api.spotify.com/v1/playlists/37i9dQZF1DWWY64wDtewQt/tracks?limit=50",
+    const responsePhonk = await fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWWY64wDtewQt/tracks?${limit}=10`,
         {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem('token')}`
@@ -13,22 +10,39 @@ async function getPlaylistSongs() {
             method: "GET",
     })
 
-    if(!response.ok){
-        return;
+    if(!responsePhonk.ok){
+        console.log('error at phonk')
     }
 
-    const data = await response.json()
-    console.log(data, 'data')
-    // const playlistID = data.href.split('playlists/')[1].split('tracks/')[0]
-    const items: string[] = []
+    const dataPhonk = await responsePhonk.json()
+    const playlistIdPhonk: string = dataPhonk.href.split('playlists/')[1].split('/tracks')[0]
 
-    for (let i = 0; i < 50; i++) {
-        items.push(data.items[i].track.uri)
+    for (let i = 0; i < limit; i++) {
+        items.push(dataPhonk.items[i].track.uri)
+        mapOfSongs.set(dataPhonk.items[i].track.uri, playlistIdPhonk)
     }
 
-    console.log(items, 'items')
+    const responseUltraGaming = await fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWYN9NBqvY7Tx/tracks?${limit}=10`,
+        {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem('token')}`
+            },
+            method: "GET",
+        })
 
-    return items
+    if(!responseUltraGaming.ok){
+        console.log('error at ultra gaming')
+    }
+
+    const dataUltraGaming = await responseUltraGaming.json()
+    const playlistIdUltraGaming: string = dataUltraGaming.href.split('playlists/')[1].split('/tracks')[0]
+
+    for (let i = 0; i < limit; i++) {
+        items.push(dataUltraGaming.items[i].track.uri)
+        mapOfSongs.set(dataUltraGaming.items[i].track.uri, playlistIdUltraGaming)
+    }
+
+    return {items, mapOfSongs}
 }
 
 export default getPlaylistSongs

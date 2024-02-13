@@ -1,10 +1,10 @@
+import playlistSongs from "./PlaylistSongs.ts";
+
 async function play() {
     const maxRetries = 3; // Set a maximum number of retries
     let retryCount = 0;
 
-    // const items: string[] | undefined = await playlistSongs()
-
-    // const tracks: string[] = ["spotify:track:3vefdW0Zsk57Qn0qxXeVCI"];
+    const { items, mapOfSongs } = await playlistSongs(10)
 
     while (retryCount < maxRetries) {
         try {
@@ -13,7 +13,7 @@ async function play() {
                     Authorization: `Bearer ${window.localStorage.getItem("token")}`
                 },
                 method: 'PUT',
-                body: JSON.stringify({"context_uri": "spotify:playlist:37i9dQZF1DWWY64wDtewQt", 'position_ms': 0})
+                body: JSON.stringify({"uris": items, 'position_ms': 0})
             });
 
             if (response.ok) {
@@ -26,6 +26,8 @@ async function play() {
             }
         } catch (err) {
             console.error(`Error during request: ${err}`);
+            console.log(items, 'play items')
+            console.log(mapOfSongs, 'map')
             break;
         }
     }

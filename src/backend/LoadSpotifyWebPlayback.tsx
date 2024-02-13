@@ -4,7 +4,9 @@ import UpdateDesktop from "./UpdateDesktop.tsx";
 import {isMobileVersion} from "./isMobileVersion";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
+import playlistSongs from "./PlaylistSongs.ts";
 
+// TODO: check the prev song after load playlist
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
     const [songArtist, setSongArtist] = useState('')
@@ -50,12 +52,10 @@ function useLoadSpotifyWebPlayback() {
             })
 
             player.addListener('ready', ({device_id}) => {
-                setLog((oldState) => oldState + device_id)
                 transferPlayback(device_id)
             })
 
             player.addListener('not_ready', ({device_id}) => {
-                console.log('not ready')
                 setLog((oldState) => oldState + device_id)
             })
 
@@ -88,19 +88,6 @@ function useLoadSpotifyWebPlayback() {
                                     artists += ', ' + str
                                 }
                             }
-
-                            // @ts-ignore
-                            setPlaylistName(String(state['context']['metadata']['context_description']))
-                            console.log(log);
-
-                            // loading functions
-                            // @ts-ignore
-                            if (state['context']['uri'].split(':')[1] != 'artist') {
-                                // @ts-ignore
-                                await playlist(String(state['context']['uri'].split(':').pop()))
-                            } else {
-                                setPlaylistName('undefined')
-                            }
                             await artist(String(base.artists[0].uri.split(':').pop()))
 
                             if (window.localStorage.getItem('prod') === 'true') {
@@ -116,6 +103,7 @@ function useLoadSpotifyWebPlayback() {
                             }
 
                             mediaSession(player, base)
+                            await getPlaylistData(state.track_window.current_track.uri)
                         }
                     }
                 )
@@ -180,16 +168,22 @@ function useLoadSpotifyWebPlayback() {
             if(!isMobileVersion()){
                 await volumeComponent(player)
             }
-
-            if(window.localStorage.getItem('load') === 'true'){
-                await player.togglePlay()
-                window.localStorage.setItem('load', 'false')
-            }
         }
 
-        // await
-
     }, []);
+
+    async function getPlaylistData(currentSong: string){
+        const {items, mapOfSongs} = await playlistSongs(10)
+
+        const playlistId: string | undefined = mapOfSongs.get(currentSong)
+        const prevSongIndex: number = items.findIndex((item) => {
+            return item === currentSong
+        }) - 1
+
+        if(mapOfSongs.get(items[prevSongIndex]) !== mapOfSongs.get(currentSong)){
+            await playlist(playlistId)
+        }
+    }
 
     function checkDirection(player: Spotify.Player) {
         if (touchendX < touchstartX) player.nextTrack()
@@ -309,7 +303,9 @@ function useLoadSpotifyWebPlayback() {
         }
     }
 
-    async function playlist(id: string) {
+    async function playlist(id: string | undefined) {
+        if(id === undefined)return
+
         try {
             const response = await fetch(`https://api.spotify.com/v1/playlists/${id}`, {
                 headers: {
@@ -324,7 +320,7 @@ function useLoadSpotifyWebPlayback() {
 
             const getJson = await response.json();
             setPlaylistImg(getJson.images[0].url)
-
+            setPlaylistName(getJson.name)
             setPlaylistFollowers(formatFollowers(+getJson.followers.total) + ' followers')
 
         } catch (err) {
@@ -376,6 +372,8 @@ function useLoadSpotifyWebPlayback() {
                 .toPrecision(3))
                 .replace('.', ',') + 'M'
         }
+
+        console.log(log)
 
         return followers
     }

@@ -6,8 +6,6 @@ function Login() {
     const auth_point = import.meta.env.VITE_AUTH_POINT
     const response_type = "token"
 
-    window.localStorage.setItem('load', 'true')
-
     const scopes = [
         'streaming',
         'user-read-recently-played',
