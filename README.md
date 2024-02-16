@@ -1,2 +1,6 @@
 # React + TypeScript + Vite
-### Listen random song from Spotify 
+### Listen random song's from Spotify 
+
+#### todo
+* share song
+* like
