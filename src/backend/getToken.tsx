@@ -1,4 +1,4 @@
-import {isMobileVersion} from "./isMobileVersion";
+import {isMobileVersion} from "./isMobileVersion.ts";
 
 function getToken() {
     const getTokenAfterLogin: string = window.location.href

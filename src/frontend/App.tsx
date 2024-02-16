@@ -3,7 +3,6 @@ import Login from "../backend/Login.tsx";
 import Footer from "./Footer.tsx";
 import Error from "./Error.tsx";
 import LoadSpotifyWebPlayback from "../backend/LoadSpotifyWebPlayback.tsx";
-import LoadComponents from "../backend/LoadComponents.tsx";
 import GetToken from "../backend/getToken.tsx";
 import {Analytics} from "@vercel/analytics/react";
 
@@ -18,7 +17,6 @@ function App() {
             <>
                 <GetToken />
                 <LoadSpotifyWebPlayback />
-                <LoadComponents />
             </>
         )
     }

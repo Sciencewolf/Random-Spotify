@@ -1,12 +1,11 @@
 import UAParser from "ua-parser-js";
 import {useEffect, useState} from "react";
 import UpdateDesktop from "./UpdateDesktop.tsx";
-import {isMobileVersion} from "./isMobileVersion";
+import {isMobileVersion} from "./isMobileVersion.ts";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
 import playlistSongs from "./PlaylistSongs.ts";
 
-// TODO: check the prev song after load playlist
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
     const [songArtist, setSongArtist] = useState('')
@@ -19,6 +18,10 @@ function useLoadSpotifyWebPlayback() {
     const [playlistImg, setPlaylistImg] = useState('')
     const [playlistName, setPlaylistName] = useState('')
     const [playlistFollowers, setPlaylistFollowers] = useState('')
+
+    const [albumImg, setAlbumImg] = useState('')
+    const [albumName, setAlbumName] = useState('')
+    const [albumMeta, setAlbumMeta] = useState('')
 
     const [log, setLog] = useState('')
     let base: string | null | Spotify.Track = ''
@@ -53,13 +56,16 @@ function useLoadSpotifyWebPlayback() {
             })
 
             player.addListener('not_ready', ({device_id}) => {
-                setLog((oldState) => oldState + device_id)
+                setLog((oldState) => oldState + 'not_ready' + device_id)
             })
 
             player.addListener('player_state_changed', async(state) => {
                 if (!state) {
                     return;
                 }
+
+                const volume = document.getElementById('volume-input') as HTMLInputElement
+                volume.value = String(await player.getVolume() * 100)
 
                 //  try using web api not this
                 player.getCurrentState().then(async state => {
@@ -100,7 +106,14 @@ function useLoadSpotifyWebPlayback() {
                             }
 
                             mediaSession(player, base)
-                            await getPlaylistData(state.track_window.current_track.uri)
+                            if(state.context.uri?.includes('playlist')){
+                                await playlist(state.context.uri?.split(':')[2])
+                            }
+                            else if(state.context.uri === ''){
+                                await getPlaylistData(state.track_window.current_track.uri)
+                            }else {
+                                await album(base.album.uri.split(':')[2])
+                            }
                         }
                     }
                 )
@@ -164,6 +177,7 @@ function useLoadSpotifyWebPlayback() {
 
             if(!isMobileVersion()){
                 await volumeComponent(player)
+                footerComponent()
             }
         }
 
@@ -188,16 +202,13 @@ function useLoadSpotifyWebPlayback() {
         if (touchendX > touchstartX) player.previousTrack()
     }
 
-    // TODO: implement changing volume icon based of bgColor
     async function volumeComponent(player: Spotify.Player){
         let previousValue: number = 0
 
         const divVolume = document.createElement('div')
         divVolume.id = 'div-volume'
         divVolume.className = 'div-volume'
-        divVolume.style.display = 'flex'
-        divVolume.style.alignItems = 'center'
-        divVolume.style.justifyContent = 'center'
+        divVolume.style.cssText = 'display: flex; justify-content: center; align-items: center;'
 
         const imgVolumeIcon = document.createElement('img')
         imgVolumeIcon.id = 'img-volume'
@@ -244,29 +255,8 @@ function useLoadSpotifyWebPlayback() {
             }
         })
 
+        // TODO: implement icon feature on input
         volumeInput.addEventListener('input', () => {
-            // if(imgVolumeIcon.alt.includes('unmute')){
-            //     if(imgVolumeIcon.alt.includes('dark')){
-            //         imgVolumeIcon.src = volumeUnmuteIconLight
-            //         imgVolumeIcon.alt = 'volume-icon mute dark'
-            //     }
-            //     else if(imgVolumeIcon.alt.includes('light')){
-            //         imgVolumeIcon.src = volumeUnmuteIconDark
-            //         imgVolumeIcon.alt = 'volume-icon mute light'
-            //     }
-            // }
-            // if(+volumeInput.value === 0){
-            //     if(imgVolumeIcon.alt.includes('unmute')){
-            //         if(imgVolumeIcon.alt.includes('dark')){
-            //             imgVolumeIcon.src = volumeMuteIconLight
-            //             imgVolumeIcon.alt = 'volume-icon unmute dark'
-            //         }
-            //         else if(imgVolumeIcon.alt.includes('light')){
-            //             imgVolumeIcon.src = volumeMuteIconDark
-            //             imgVolumeIcon.alt = 'volume-icon unmute light'
-            //         }
-            //     }
-            // }
             player.setVolume(+volumeInput.value / 100)
             volumeInput.blur()
         })
@@ -274,6 +264,24 @@ function useLoadSpotifyWebPlayback() {
         divVolume.appendChild(imgVolumeIcon)
         divVolume.appendChild(volumeInput)
         document.body.appendChild(divVolume)
+    }
+
+    function footerComponent(){
+        const footer = document.createElement('footer')
+        footer.id = 'footer'
+        footer.className = 'footer-after'
+        footer.innerHTML = `
+                <span>
+                    Developed with <span id="heart">❤️</span> by
+                </span>
+                <span id="dev">
+                    <a href="https://github.com/Sciencewolf" target="_blank">
+                        Aron Marton
+                    </a>
+                </span>`
+
+        document.body.appendChild(footer)
+
     }
 
     function mediaSession(player: Spotify.Player, base: Spotify.Track){
@@ -316,6 +324,10 @@ function useLoadSpotifyWebPlayback() {
                 return;
             }
 
+            setAlbumMeta('')
+            setAlbumImg('')
+            setAlbumName('')
+
             const getJson = await response.json();
             setPlaylistImg(getJson.images[0].url)
             setPlaylistName(getJson.name)
@@ -346,6 +358,30 @@ function useLoadSpotifyWebPlayback() {
         }catch (err){
             console.log(err)
         }
+    }
+
+    async function album(id: string){
+        const response = await fetch(`https://api.spotify.com/v1/albums/${id}`, {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`
+            }
+        })
+
+        if(!response.ok){
+            return
+        }
+
+        setPlaylistName('')
+        setPlaylistImg('')
+        setPlaylistFollowers('0 followers')
+
+        const data = await response.json()
+        console.log(data, 'album')
+
+        setAlbumImg(data.images[1].url)
+        setAlbumName(data.name)
+        const year: string = data.release_date
+        setAlbumMeta(data.album_type + ' • ' + year.split('-')[0])
     }
 
     function formatFollowers(total: number) {
@@ -387,9 +423,9 @@ function useLoadSpotifyWebPlayback() {
                                        artistName={artistName}
                                        artistImg={artistImg}
                                        followersArtist={artistFollowers}
-                                       playlistName={playlistName}
-                                       playlistImg={playlistImg}
-                                       followersPlaylist={playlistFollowers}
+                                       playlistName={playlistName !== '' ? playlistName : albumName}
+                                       playlistImg={playlistImg !== '' ? playlistImg : albumImg}
+                                       followersPlaylist={albumMeta !== '' ? albumMeta : playlistFollowers}
                                        link={songImg}
                                        title={songName !== '' ? songName + ' • ' + songArtist : "Random Spotify"}
                         />
@@ -403,7 +439,7 @@ function useLoadSpotifyWebPlayback() {
                                       artistName={artistName}
                                       artistImg={artistImg}
                                       followersArtist={artistFollowers}
-                                      playlistName={playlistName}
+                                      playlistName={playlistName !== '' ? playlistName : albumName}
                                       link={songImg}
                         />
                     </>

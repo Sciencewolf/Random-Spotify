@@ -4,6 +4,7 @@ import {ArtistProps, PlaylistProps, Props, SongProps} from "./Props.ts";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import ShowPlaylistOnMobile from "../frontend/ShowPlaylistOnMobile.tsx";
+import LoadComponents from "./LoadComponents.tsx";
 
 function updateMobile({
                           playlistName,
@@ -14,6 +15,7 @@ function updateMobile({
 
     return (
         <>
+            <LoadComponents/>
             {playlistName != 'undefined'
                 ? <ShowPlaylistOnMobile playlistName={playlistName}
                 />

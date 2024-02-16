@@ -1,11 +1,11 @@
 import UpdateSkeleton from "../frontend/UpdateSkeleton.tsx";
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import {ArtistProps, PlaylistProps, Props, SongProps} from "./Props.ts";
-import Footer from "../frontend/Footer.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 import AboutTheArtist from "../frontend/AboutTheArtist.tsx";
 import LoadingCard from "../frontend/LoadingCard.tsx";
 import ShowPlaylistOfSong from "../frontend/ShowPlaylistOfSong.tsx";
+import LoadComponents from "./LoadComponents.tsx";
 
 function updateDesktop({
                        artistName, artistImg, followersArtist,
@@ -14,6 +14,7 @@ function updateDesktop({
                        title}: SongProps & ArtistProps & PlaylistProps & Props) {
     return (
         <>
+            <LoadComponents />
             {artistName !== ''
                 ? <AboutTheArtist artistName={artistName}
                                   artistImg={artistImg}
@@ -33,7 +34,6 @@ function updateDesktop({
                 />
                 : <LoadingCard/>}
             <UpdateTitle title={title} />
-            <Footer isChangeFooterClassName={true}/>
             <SetBackgroundColor link={link == undefined ? "" : link} />
         </>
     )

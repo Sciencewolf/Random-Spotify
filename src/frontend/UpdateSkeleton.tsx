@@ -23,12 +23,12 @@ function UpdateSkeleton({ songImg, songName, songArtist }: SongProps): JSX.Eleme
                 >
                     {songName}
                 </h2>
-                <h5 className={"songArtist-h5"}
+                <p className={"songArtist-h5"}
                     style={params}
                     id={"songArtist-h5"}
                 >
                     {songArtist}
-                </h5>
+                </p>
                 <div className={"controllers"}
                      id={"controllers"}>
                     <button className={"previous-button"}

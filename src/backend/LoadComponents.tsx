@@ -90,7 +90,8 @@ function LoadComponents(): JSX.Element {
             ) : (
                 <>
                     <UpdateLoginButton userIcon={userIcon}
-                                       userName={userName} />
+                                       userName={userName}
+                    />
                 </>
             )}
         </>
