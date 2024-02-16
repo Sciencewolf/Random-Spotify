@@ -24,10 +24,12 @@ function useLoadSpotifyWebPlayback() {
     const [albumMeta, setAlbumMeta] = useState('')
 
     const [log, setLog] = useState('')
-    let base: string | null | Spotify.Track = ''
+    let base: Spotify.Track
     let artists: string = ''
     let touchstartX = 0
     let touchendX = 0
+
+    let timer: number | undefined
 
     const pauseIcon: string = 'https://assets.dryicons.com/uploads/icon/svg/9893/ef127c46-38b9-4cf5-bd27-4474e15b105c.svg'
     const playIcon: string = 'https://img.icons8.com/windows/32/play--v1.png'
@@ -106,6 +108,7 @@ function useLoadSpotifyWebPlayback() {
                             }
 
                             mediaSession(player, base)
+
                             if(state.context.uri?.includes('playlist')){
                                 await playlist(state.context.uri?.split(':')[2])
                             }
@@ -178,7 +181,12 @@ function useLoadSpotifyWebPlayback() {
             if(!isMobileVersion()){
                 await volumeComponent(player)
                 footerComponent()
+                shareComponent()
             }
+        }
+
+        return () => {
+            clearTimeout(timer)
         }
 
     }, []);
@@ -282,6 +290,37 @@ function useLoadSpotifyWebPlayback() {
 
         document.body.appendChild(footer)
 
+    }
+
+    function shareComponent(){
+        const button = document.createElement('button')
+        button.id = 'btn-share'
+        button.className = 'btn-share'
+        button.innerHTML = '<img ' +
+            'src="https://img.icons8.com/pulsar-line/48/share-rounded.png" ' +
+            'alt="share-rounded" ' +
+            'id="img-share"/>'
+
+        button.addEventListener('click', () => {
+            button.value = base.id ?? ''
+            window
+                .navigator
+                .clipboard
+                .writeText(import.meta.env.VITE_PRODUCTION + '/preview/' + base.id)
+                .then(() => {
+                    const popUp = document.createElement('span')
+                    popUp.id = 'popup'
+                    popUp.className = 'popup'
+                    popUp.innerHTML = 'Copied to clipboard!'
+
+                    document.body.appendChild(popUp)
+                    timer = setTimeout(() => {
+                        popUp.style.display = 'none'
+                    }, 2000)
+                })
+        })
+
+        document.body.appendChild(button)
     }
 
     function mediaSession(player: Spotify.Player, base: Spotify.Track){

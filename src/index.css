@@ -35,11 +35,47 @@ h2, p {
   right: 2em;
 }
 
+.btn-share {
+  position: absolute;
+  bottom: 1.7em;
+  right: 16em;
+  background-color: transparent;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: transparent;
+}
+
+.popup {
+  position: absolute;
+  top: 1.5em;
+  right: 50%;
+  transform: translateX(+50%);
+  background-color: silver;
+  color: black;
+  margin: 0.5em;
+  padding: 0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .div-volume input:hover {
   cursor: pointer;
 }
 
+#img-share {
+  background-color: transparent;
+  width: 30px;
+  height: 30px;
+}
+
 .div-volume img:hover {
+  cursor: pointer;
+}
+
+.btn-share:hover {
   cursor: pointer;
 }
 

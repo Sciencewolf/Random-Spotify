@@ -6,7 +6,7 @@ function getToken() {
         .split("&")[0]
         .split('=')[1];
 
-    if (window.localStorage.getItem("token") === undefined || window.localStorage.getItem('token') === null) {
+    if (window.localStorage.getItem('token') === null) {
         window.localStorage.setItem("token", getTokenAfterLogin)
         window.location.hash = ''
     } else {

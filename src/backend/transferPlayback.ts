@@ -1,7 +1,7 @@
 import play from "./play.ts";
 
 
-async function transferPlayback(device_id: string) {
+async function transferPlayback(device_id: string, preview?: boolean, id?: string) {
     const response = await fetch('https://api.spotify.com/v1/me/player', {
         headers: {
             Authorization: `Bearer ${window.localStorage.getItem("token")}`
@@ -16,7 +16,7 @@ async function transferPlayback(device_id: string) {
     }
 
     console.log('transfer ready')
-    await play()
+    await play(preview, id)
 }
 
 export default transferPlayback
