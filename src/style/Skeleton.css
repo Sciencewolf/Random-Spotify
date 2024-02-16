@@ -3,22 +3,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 400px;
-    width: 350px;
-    height: auto;
-    background-color: #f9f9f9;
-    color: black;
+    width: fit-content;
+    background-color: transparent;
     border-radius: 10px;
     user-select: none;
 }
+
+/*#f9f9f9*/
 
 .controllers {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 3em;
-    position: relative;
-    top: 25px;
+    gap: 2em;
+    position: absolute;
+    bottom: 1.5em;
 }
 
 #play-button {
@@ -52,18 +51,15 @@
 }
 
 #song-img {
-    padding-top: 20px;
     width: 200px;
     height: 200px;
     object-fit: contain;
-    margin: 10px;
-    background-color: silver;
+    border-radius: 10px;
 }
 
 #songName-h2 {
     position: relative;
-    margin: 10px;
-    max-width: 400px;
+    max-width: 280px;
     text-overflow: ellipsis;
     overflow: hidden;
     width: 200px;

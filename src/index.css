@@ -25,9 +25,13 @@ body {
   min-height: 100vh;
 }
 
+h2, p {
+  margin: 0;
+}
+
 .div-volume {
   position: absolute;
-  bottom: 3em;
+  bottom: 1.5em;
   right: 2em;
 }
 

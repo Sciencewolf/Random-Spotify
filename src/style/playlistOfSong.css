@@ -1,14 +1,21 @@
 .showPlaylistOfSong-div {
-    width: auto;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: #f9f9f9;
-    color: black;
-    padding: 1em;
+    background-color: transparent;
+    padding-bottom: 1em;
     border-radius: 10px;
-    max-width: 300px;
+}
+
+.showPlaylistOfSong-div h2{
+    max-width: 280px;
+    text-overflow: ellipsis;
+}
+
+.showPlaylistOfSong-div img{
+    border-radius: 10px;
 }
 
 .lds-ellipsis {
