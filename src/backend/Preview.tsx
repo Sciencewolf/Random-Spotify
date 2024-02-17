@@ -5,6 +5,7 @@ import '../style/Preview.css'
 import UpdateTitle from "../frontend/UpdateTitle.tsx";
 import SetBackgroundColor from "../frontend/SetBackgroundColor.tsx";
 import LoadComponents from "./LoadComponents.tsx";
+import mediaSession from "./mediaSession.ts";
 
 function usePreview() {
     const [songName, setSongName] = useState('')
@@ -78,6 +79,8 @@ function usePreview() {
                     if (window.localStorage.getItem('prod') === 'true') {
                         console.clear()
                     }
+
+                    mediaSession(player, state.track_window.current_track, artists)
                 })
             })
 

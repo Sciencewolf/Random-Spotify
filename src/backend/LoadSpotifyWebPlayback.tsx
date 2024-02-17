@@ -5,6 +5,7 @@ import {isMobileVersion} from "./isMobileVersion.ts";
 import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
 import playlistSongs from "./PlaylistSongs.ts";
+import mediaSession from "./mediaSession.ts";
 
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
@@ -107,7 +108,7 @@ function useLoadSpotifyWebPlayback() {
                                 playButtonImage.src = playIcon
                             }
 
-                            mediaSession(player, base)
+                            mediaSession(player, base, artists)
 
                             if(state.context.uri?.includes('playlist')){
                                 await playlist(state.context.uri?.split(':')[2])
@@ -296,56 +297,36 @@ function useLoadSpotifyWebPlayback() {
         const button = document.createElement('button')
         button.id = 'btn-share'
         button.className = 'btn-share'
+        button.tabIndex = -1
         button.innerHTML = '<img ' +
             'src="https://img.icons8.com/pulsar-line/48/share-rounded.png" ' +
             'alt="share-rounded" ' +
-            'id="img-share"/>'
+            'id="img-share" ' +
+            'tabindex="-1"/>'
 
         button.addEventListener('click', () => {
             button.value = base.id ?? ''
             window
                 .navigator
                 .clipboard
-                .writeText(import.meta.env.VITE_PRODUCTION + '/preview/' + base.id)
+                .writeText(import.meta.env.VITE_PRODUCTION + 'preview/' + base.id)
                 .then(() => {
                     const popUp = document.createElement('span')
                     popUp.id = 'popup'
                     popUp.className = 'popup'
-                    popUp.innerHTML = 'Copied to clipboard!'
+                    popUp.innerHTML = '✅ Copied!'
+                    popUp.tabIndex = -1
 
                     document.body.appendChild(popUp)
                     timer = setTimeout(() => {
-                        popUp.style.display = 'none'
-                    }, 2000)
+                        document.body.removeChild(popUp)
+                        button.blur()
+                    }, 3500)
                 })
+            button.blur()
         })
 
         document.body.appendChild(button)
-    }
-
-    function mediaSession(player: Spotify.Player, base: Spotify.Track){
-        if("mediaSession" in window.navigator){
-            window.navigator.mediaSession.metadata = new MediaMetadata({
-                title: base.name,
-                artist: artists,
-                artwork: [
-                    { src: String(base.album.images[0].url), sizes: '96x96', type: 'image/png' },
-                    { src: String(base.album.images[0].url), sizes: '128x128', type: 'image/png' },
-                    { src: String(base.album.images[0].url), sizes: '192x192', type: 'image/png' },
-                    { src: String(base.album.images[0].url), sizes: '256x256', type: 'image/png' },
-                    { src: String(base.album.images[0].url), sizes: '384x384', type: 'image/png' },
-                    { src: String(base.album.images[0].url), sizes: '512x512', type: 'image/png' }
-                ]
-            })
-
-            window.navigator.mediaSession.setActionHandler('nexttrack', () => {
-                player.nextTrack()
-            })
-
-            window.navigator.mediaSession.setActionHandler('previoustrack', () => {
-                player.previousTrack()
-            })
-        }
     }
 
     async function playlist(id: string | undefined) {

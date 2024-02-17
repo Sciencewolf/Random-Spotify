@@ -43,18 +43,17 @@ function App() {
         window.localStorage.setItem('preview', window.location.href.split('/preview/')[1])
         return (
             <>
-                <Login />
+                <Login/>
                 <Footer isChangeFooterClassName={false}/>
-                <Analytics />
+                <Analytics/>
             </>
         )
-    }
-    else {
+    } else {
         return (
             <>
-                <Login />
+                <Login/>
                 <Footer isChangeFooterClassName={false}/>
-                <Analytics />
+                <Analytics/>
             </>
         )
     }
