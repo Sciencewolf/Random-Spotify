@@ -35,6 +35,10 @@ h2, p {
   right: 2em;
 }
 
+.div-volume input:hover {
+  cursor: pointer;
+}
+
 .btn-share {
   position: absolute;
   bottom: 1.7em;
@@ -63,14 +67,34 @@ h2, p {
   border-radius: 10px;
 }
 
-.div-volume input:hover {
-  cursor: pointer;
-}
-
 #img-share {
   background-color: transparent;
   width: 30px;
   height: 30px;
+}
+
+.like-btn {
+  position: absolute;
+  bottom: 1.6em;
+  right: 20em;
+  background-color: transparent;
+  outline: none;
+  border-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.like-btn img {
+  width: 30px;
+  height: 30px;
+  aspect-ratio: auto 30 / 30
+}
+
+.like-btn:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: .2s all ease-in;
 }
 
 .div-volume img:hover {
