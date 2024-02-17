@@ -12,10 +12,12 @@ function Login() {
         'user-read-currently-playing',
         'user-read-playback-state',
         'user-modify-playback-state',
+        'user-library-read',
+        'user-library-modify',
+        'user-top-read',
         'playlist-read-private',
         'playlist-modify-public',
         'playlist-modify-private',
-        'user-top-read'
     ].join(' ').replace(' ', '%20');
 
     return (

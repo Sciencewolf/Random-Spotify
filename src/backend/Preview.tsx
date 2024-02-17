@@ -132,7 +132,7 @@ function usePreview() {
                 </button>
             </div>
             <LoadComponents />
-            <UpdateTitle title={songName !== '' ? songName + ' • ' + songArtist : "Random Spotify"}/>
+            <UpdateTitle title={songName !== '' ? songName + ' • ' + songArtist : "Random Spotify Preview"}/>
             <SetBackgroundColor link={songImg}/>
         </>
     )

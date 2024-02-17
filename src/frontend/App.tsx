@@ -15,6 +15,8 @@ function App() {
 
     if(window.location.href.includes('access_token=')) {
         if(window.localStorage.getItem('preview') !== null){
+            const title = document.querySelector('title') as HTMLTitleElement
+            title.innerHTML = 'Random Spotify Preview'
             return (
                 <>
                     <GetToken />
@@ -41,6 +43,8 @@ function App() {
     }
     else if(window.location.href.includes('/preview/')){
         window.localStorage.setItem('preview', window.location.href.split('/preview/')[1])
+        const title = document.querySelector('title') as HTMLTitleElement
+        title.innerHTML = 'Random Spotify Preview'
         return (
             <>
                 <Login/>

@@ -7,6 +7,7 @@ function setBackgroundColor(props: {link: string}) {
     const footer_a = document.querySelector('#dev a') as HTMLLinkElement
     const img_volume_icon = document.getElementById('img-volume') as HTMLImageElement
     const img_share_icon = document.getElementById('img-share') as HTMLImageElement
+    const img_like_icon = document.getElementById('like-img') as HTMLImageElement
     const theme_color = document.getElementById('meta-theme') as HTMLMetaElement
     const h2 = document.querySelectorAll('h2')!
     const p = document.querySelectorAll('p')!
@@ -16,6 +17,9 @@ function setBackgroundColor(props: {link: string}) {
 
     const img_share_icon_light: string = 'https://img.icons8.com/ios-glyphs/30/FFFFFF/share-rounded.png'
     const img_share_icon_dark: string = 'https://img.icons8.com/ios-glyphs/30/000000/share-rounded.png'
+
+    const img_like_icon_light: string = 'https://img.icons8.com/ios-glyphs/30/FFFFFF/hearts.png'
+    const img_like_icon_dark: string = 'https://img.icons8.com/ios/50/like--v1.png'
 
     fac.getColorAsync(props.link)
         .then(color => {
@@ -32,6 +36,7 @@ function setBackgroundColor(props: {link: string}) {
                 img_volume_icon.src = img_volume_icon_light
                 img_volume_icon.alt = 'volume-icon unmute light'
                 img_share_icon.src = img_share_icon_light
+                img_like_icon.src = img_like_icon_light
             }
             else if(color.isLight){
                 footer.style.color = '#000'
@@ -45,6 +50,7 @@ function setBackgroundColor(props: {link: string}) {
                 img_volume_icon.src = img_volume_icon_dark
                 img_volume_icon.alt = 'volume-img unmute dark'
                 img_share_icon.src = img_share_icon_dark
+                img_like_icon.src = img_like_icon_dark
             }
             theme_color.content = color.rgb
         })

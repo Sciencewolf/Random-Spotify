@@ -6,6 +6,9 @@ import UpdateMobile from "./UpdateMobile.tsx";
 import transferPlayback from "./transferPlayback.ts";
 import playlistSongs from "./PlaylistSongs.ts";
 import mediaSession from "./mediaSession.ts";
+import volumeComponent from "../frontend/volumeComponent.ts";
+import footerComponent from "../frontend/footerComponent.ts";
+import likeSong from "../frontend/likeSong.ts";
 
 function useLoadSpotifyWebPlayback() {
     const [songImg, setSongImg] = useState('')
@@ -29,7 +32,6 @@ function useLoadSpotifyWebPlayback() {
     let artists: string = ''
     let touchstartX = 0
     let touchendX = 0
-
     let timer: number | undefined
 
     const pauseIcon: string = 'https://assets.dryicons.com/uploads/icon/svg/9893/ef127c46-38b9-4cf5-bd27-4474e15b105c.svg'
@@ -96,10 +98,6 @@ function useLoadSpotifyWebPlayback() {
                             }
                             await artist(String(base.artists[0].uri.split(':').pop()))
 
-                            if (window.localStorage.getItem('prod') === 'true') {
-                                console.clear()
-                            }
-
                             if (!state.paused) {
                                 playButtonImage.src = pauseIcon
                                 playButtonImage.style.width = '32px'
@@ -109,6 +107,7 @@ function useLoadSpotifyWebPlayback() {
                             }
 
                             mediaSession(player, base, artists)
+                            await getLikedSongs(base.id ?? '')
 
                             if(state.context.uri?.includes('playlist')){
                                 await playlist(state.context.uri?.split(':')[2])
@@ -117,6 +116,10 @@ function useLoadSpotifyWebPlayback() {
                                 await getPlaylistData(state.track_window.current_track.uri)
                             }else {
                                 await album(base.album.uri.split(':')[2])
+                            }
+
+                            if (window.localStorage.getItem('prod') === 'true') {
+                                console.clear()
                             }
                         }
                     }
@@ -180,9 +183,10 @@ function useLoadSpotifyWebPlayback() {
             })
 
             if(!isMobileVersion()){
-                await volumeComponent(player)
+                await volumeComponent(player, volumeMuteIconDark, volumeMuteIconLight, volumeUnmuteIconDark, volumeUnmuteIconLight)
                 footerComponent()
                 shareComponent()
+                await likeComponent()
             }
         }
 
@@ -196,101 +200,46 @@ function useLoadSpotifyWebPlayback() {
         const {items, mapOfSongs} = await playlistSongs(10)
         const playlistId: string = mapOfSongs.get(currentSong) ?? ''
 
-        const prevSongIndex: number = items.findIndex((item) => {
-            return item === currentSong
-        }) - 1
-
         await playlist(playlistId)
-        if(mapOfSongs.get(items[prevSongIndex]) !== mapOfSongs.get(currentSong)){
-            console.log(mapOfSongs.get(items[prevSongIndex]), mapOfSongs.get(currentSong), 'playlistComparison')
-        }
+        console.log(items)
     }
 
-    function checkDirection(player: Spotify.Player) {
-        if (touchendX < touchstartX) player.nextTrack()
-        if (touchendX > touchstartX) player.previousTrack()
-    }
-
-    async function volumeComponent(player: Spotify.Player){
-        let previousValue: number = 0
-
-        const divVolume = document.createElement('div')
-        divVolume.id = 'div-volume'
-        divVolume.className = 'div-volume'
-        divVolume.style.cssText = 'display: flex; justify-content: center; align-items: center;'
-
-        const imgVolumeIcon = document.createElement('img')
-        imgVolumeIcon.id = 'img-volume'
-        imgVolumeIcon.src = 'https://img.icons8.com/ios-glyphs/30/medium-volume.png'
-        imgVolumeIcon.alt = 'volume-icon unmute'
-
-        const volumeInput = document.createElement('input')
-        volumeInput.className = 'volume-input'
-        volumeInput.id = 'volume-input'
-        volumeInput.type = 'range'
-        volumeInput.tabIndex = -1
-        volumeInput.value = String(await player.getVolume() * 100)
-        volumeInput.max = '100'
-        volumeInput.min = '0'
-        volumeInput.step = '1'
-
-        // good
-        imgVolumeIcon.addEventListener('click', () => {
-            if(imgVolumeIcon.alt.includes('unmute')){
-                if(imgVolumeIcon.alt.includes('dark')){
-                    imgVolumeIcon.src = volumeMuteIconLight
-                    imgVolumeIcon.alt = 'volume-icon mute dark'
-                }
-                else if(imgVolumeIcon.alt.includes('light')){
-                    imgVolumeIcon.src = volumeMuteIconDark
-                    imgVolumeIcon.alt = 'volume-icon mute light'
-                }
-
-                previousValue = +volumeInput.value / 100
-                player.setVolume(0)
-                volumeInput.value = '0'
-            }else if(imgVolumeIcon.alt.includes('mute')){
-                if(imgVolumeIcon.alt.includes('dark')){
-                    imgVolumeIcon.src = volumeUnmuteIconLight
-                    imgVolumeIcon.alt = 'volume-icon unmute dark'
-                }
-                else if(imgVolumeIcon.alt.includes('light')){
-                    imgVolumeIcon.src = volumeUnmuteIconDark
-                    imgVolumeIcon.alt = 'volume-icon unmute light'
-                }
-
-                player.setVolume(previousValue)
-                volumeInput.value = (previousValue * 100).toString()
+    async function getLikedSongs(id: string) {
+        const response = await fetch('https://api.spotify.com/v1/me/tracks?limit=50', {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`
             }
         })
 
-        // TODO: implement icon feature on input
-        volumeInput.addEventListener('input', () => {
-            player.setVolume(+volumeInput.value / 100)
-            volumeInput.blur()
-        })
+        if(!response.ok){
+            return
+        }
 
-        divVolume.appendChild(imgVolumeIcon)
-        divVolume.appendChild(volumeInput)
-        document.body.appendChild(divVolume)
+        const data = await response.json()
+        console.log(data, 'liked songs', id)
+
+        for (let i = 0; i < 50; i++) {
+            if(data.items[i].track.id === id){
+                const img = document.getElementById('like-img') as HTMLImageElement
+                img.src = 'https://img.icons8.com/ios-glyphs/60/40C057/like--v1.png'
+            }
+        }
     }
 
-    function footerComponent(){
-        const footer = document.createElement('footer')
-        footer.id = 'footer'
-        footer.className = 'footer-after'
-        footer.innerHTML = `
-                <span>
-                    Developed with <span id="heart">❤️</span> by
-                </span>
-                <span id="dev">
-                    <a href="https://github.com/Sciencewolf" target="_blank">
-                        Aron Marton
-                    </a>
-                </span>`
+    async function likeComponent() {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.id = 'like-btn'
+        button.className = 'like-btn'
+        button.innerHTML = `<img 
+                src="https://img.icons8.com/ios/50/like--v1.png" 
+                alt="like--v1" id="like-img"/>`
 
-        document.body.appendChild(footer)
+        button.addEventListener('click', async() => {
+            await likeSong(base.id ?? '')
+        })
 
+        document.body.appendChild(button)
     }
 
     function shareComponent(){
@@ -305,7 +254,6 @@ function useLoadSpotifyWebPlayback() {
             'tabindex="-1"/>'
 
         button.addEventListener('click', () => {
-            button.value = base.id ?? ''
             window
                 .navigator
                 .clipboard
@@ -329,6 +277,11 @@ function useLoadSpotifyWebPlayback() {
         document.body.appendChild(button)
     }
 
+    function checkDirection(player: Spotify.Player) {
+        if (touchendX < touchstartX) player.nextTrack()
+        if (touchendX > touchstartX) player.previousTrack()
+    }
+
     async function playlist(id: string | undefined) {
         if(id === undefined)return
 
@@ -340,7 +293,7 @@ function useLoadSpotifyWebPlayback() {
             })
 
             if (!response.ok) {
-                setPlaylistName('undefined')
+                await album(base.album.uri.split(':')[2])
                 return;
             }
 
@@ -396,8 +349,6 @@ function useLoadSpotifyWebPlayback() {
         setPlaylistFollowers('0 followers')
 
         const data = await response.json()
-        console.log(data, 'album')
-
         setAlbumImg(data.images[1].url)
         setAlbumName(data.name)
         const year: string = data.release_date
